@@ -1,334 +1,1081 @@
-<!DOCTYPE html>
-<html lang="pt">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Toulouse Trip Guide 2026</title>
-  
-  <!-- Tailwind CSS via CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
+import React, { useState, useEffect } from 'react';
+import {
+  Plane,
+  MapPin,
+  Calendar,
+  Clock,
+  Compass,
+  Utensils,
+  Bot,
+  Send,
+  ExternalLink,
+  Circle,
+  AlertCircle,
+  ChevronRight,
+  Bus,
+  Hotel,
+  Sparkles,
+  Navigation,
+  Globe,
+  Coffee,
+  Check,
+  PhoneCall
+} from 'lucide-react';
 
-  <!-- React & React DOM -->
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-</head>
-<body class="bg-slate-950 text-slate-100 font-sans">
+// Mock data for Toulouse Trip 2026
+const TRIP_METADATA = {
+  title: "Toulouse Trip Guide 2026",
+  subtitle: "Viagem à Cidade Rosa & Occitânia",
+  startDate: "2026-10-01T17:00:00",
+  endDate: "2026-10-04T22:30:00",
+  flights: {
+    outbound: {
+      code: "FR1798",
+      airline: "Ryanair",
+      departure: "LIS 17:00",
+      arrival: "TLS 19:50",
+      date: "01/10/2026 (Quinta-feira)",
+      origin: "Lisboa (LIS)",
+      destination: "Toulouse-Blagnac (TLS)"
+    },
+    inbound: {
+      code: "FR1799",
+      airline: "Ryanair",
+      departure: "TLS 22:30",
+      arrival: "LIS 23:35",
+      date: "04/10/2026 (Domingo)",
+      origin: "Toulouse-Blagnac (TLS)",
+      destination: "Lisboa (LIS)"
+    }
+  },
+  accommodation: {
+    name: "Hotel Mercure Toulouse Centre Wilson Capitole",
+    address: "7 Rue Labeda, 31000 Toulouse",
+    regime: "APA (Pequeno-almoço incluído)",
+    checkIn: "01/10 a partir das 15:00",
+    checkOut: "04/10 até às 12:00",
+    phone: "+33 5 34 45 40 40",
+    notes: "Localização centralíssima a 3 min da Place Wilson e Capitole."
+  },
+  mainMeetingPoint: {
+    name: "Ponto de Encontro dos Tours",
+    address: "29 Allée Jean Jaurès, 31000 Toulouse",
+    notes: "Local exato de partida dos autocarros para Carcassonne, Albi e Cordes-sur-Ciel.",
+    coords: [43.6062, 1.4501]
+  }
+};
 
-  <div id="root"></div>
+const ITINERARY_DAYS = [
+  {
+    day: 1,
+    date: "01 Out 2026",
+    title: "Chegada & Primeiro Olhar sobre Toulouse",
+    subtitle: "Aterragem, Transfer e Jantar na Place du Capitole",
+    tag: "Chegada",
+    color: "bg-amber-500",
+    events: [
+      { id: "e1-1", time: "17:00 - 19:50", title: "Voo Lisboa (LIS) ➔ Toulouse (TLS)", location: "Aeroporto TLS", desc: "Voo Ryanair FR1798. Chegada prevista às 19:50 hora local.", type: "flight" },
+      { id: "e1-2", time: "20:15 - 20:45", title: "Transfer Navette Aéroport ➔ Jean Jaurès", location: "Estação Jean Jaurès", desc: "Apanhar Navette no aeroporto (9,00 €). Saída na paragem Jean Jaurès.", type: "transport" },
+      { id: "e1-3", time: "20:55", title: "Check-in no Hotel Mercure Capitole", location: "7 Rue Labeda", desc: "Instalação nos quartos. O hotel fica a 5 min a pé de Jean Jaurès.", type: "hotel" },
+      { id: "e1-4", time: "21:30 - 23:00", title: "Jantar Rápido & Passeio Noturno", location: "Place du Capitole", desc: "Jantar na famosa praça iluminada da Cidade Rosa e passeio a pé suave.", type: "food" }
+    ]
+  },
+  {
+    day: 2,
+    date: "02 Out 2026",
+    title: "Excursão à Cité de Carcassonne",
+    subtitle: "Cidadela Medieval, Cassoulet e Pôr do Sol no Rio Garonne",
+    tag: "Carcassonne",
+    color: "bg-rose-600",
+    events: [
+      { id: "e2-1", time: "09:15", title: "Encontro para a Excursão", location: "29 All. Jean Jaurès", desc: "Comparência no ponto de partida com calçado confortável para empedrado.", type: "meet" },
+      { id: "e2-2", time: "09:30 - 10:45", title: "Viagem em Autocarro para Carcassonne", location: "Autocarro (75 min)", desc: "Trajeto cénico pela região de Occitânia.", type: "transport" },
+      { id: "e2-3", time: "10:45 - 14:30", title: "Visita Cité de Carcassonne & Château Comtal", location: "Carcassonne", desc: "3h45m livres para explorar muralhas medievais, Castelo Comtal e almoço tradicional de Cassoulet.", type: "sight" },
+      { id: "e2-4", time: "14:30 - 15:45", title: "Regresso a Toulouse", location: "Autocarro para Jean Jaurès", desc: "Chegada prevista às 15:45.", type: "transport" },
+      { id: "e2-5", time: "16:30 - 19:00", title: "Passeio Rio Garonne & Pont Neuf", location: "Pont Neuf & Quais de la Daurade", desc: "Caminhada relaxante à beira do rio, fotografia ao pôr do sol.", type: "sight" },
+      { id: "e2-6", time: "20:00", title: "Jantar no Le Breughel", location: "Le Breughel", desc: "Restaurante típico de bistro acolhedor com excelente relação qualidade/preço.", type: "food" }
+    ]
+  },
+  {
+    day: 3,
+    date: "03 Out 2026",
+    title: "Albi & Cordes-sur-Ciel",
+    subtitle: "Património UNESCO da Tijola Vermelha e Vila Medieval nas Nuvens",
+    tag: "Albi & Cordes",
+    color: "bg-purple-600",
+    events: [
+      { id: "e3-1", time: "09:15", title: "Encontro para a Excursão Albi & Cordes", location: "29 All. Jean Jaurès", desc: "Embarque no autocarro pontual às 09:30.", type: "meet" },
+      { id: "e3-2", time: "09:30 - 10:30", title: "Autocarro Toulouse ➔ Albi", location: "Autocarro (1h)", desc: "Chegada a Albi, a monumental cidade episcopal.", type: "transport" },
+      { id: "e3-3", time: "10:30 - 14:30", title: "Exploração de Albi & Almoço", location: "Catedral Sainte-Cécile & Palais Berbie", desc: "Visita à incrível Catedral fortificada de tijola e Jardins do Palais de la Berbie. Almoço na Crêperie du Garric.", type: "sight" },
+      { id: "e3-4", time: "14:30 - 15:00", title: "Autocarro Albi ➔ Cordes-sur-Ciel", location: "Autocarro (30 min)", desc: "Subida até à fascinante vila medieval no cimo da colina.", type: "transport" },
+      { id: "e3-5", time: "15:00 - 17:30", title: "Visita a Cordes-sur-Ciel", location: "Vila Medieval (2.5h)", desc: "Ruas empedradas, artesanato local e vistas panorâmicas dos miradouros.", type: "sight" },
+      { id: "e3-6", time: "17:30 - 18:30", title: "Regresso a Toulouse", location: "Autocarro ➔ Jean Jaurès", desc: "Chegada a Toulouse por volta das 18:30.", type: "transport" },
+      { id: "e3-7", time: "20:00", title: "Jantar na Place Saint-Georges", location: "Place Saint-Georges", desc: "Jantar numa das praças mais acolhedoras e animadas de Toulouse.", type: "food" }
+    ]
+  },
+  {
+    day: 4,
+    date: "04 Out 2026",
+    title: "Coração de Toulouse & Regresso a Lisboa",
+    subtitle: "Mercado Victor Hugo, Monumentos, Compras e Voo de Regresso",
+    tag: "Toulouse & Regresso",
+    color: "bg-emerald-600",
+    events: [
+      { id: "e4-1", time: "09:30 - 11:30", title: "Marché Victor Hugo & Basílica Saint-Sernin", location: "Centro Histórico", desc: "Visita ao mercado gastronómico e à maior basílica românica da Europa.", type: "sight" },
+      { id: "e4-2", time: "11:30 - 12:30", title: "Couvent des Jacobins", location: "Rue Lapeyrouse", desc: "Admirar a célebre 'Palmeira' de pilares medievais e o claustro silencioso.", type: "sight" },
+      { id: "e4-3", time: "12:30 - 14:00", title: "Almoço Típico no 1º Andar do Mercado Victor Hugo", location: "Marché Victor Hugo", desc: "Especialidades ultra frescas grelhadas na hora nos bistrôs do 1º andar.", type: "food" },
+      { id: "e4-4", time: "14:30 - 18:30", title: "Compras Rue Saint-Rome & Canal du Midi", location: "Rue Saint-Rome & Canal", desc: "Últimas compras de lembranças e passeio relaxante ao longo do Canal du Midi.", type: "sight" },
+      { id: "e4-5", time: "20:00", title: "Navette de Regresso ao Aeroporto", location: "Paragem Jean Jaurès", desc: "Embarque na Navette para o Aeroporto TLS (chegada 20:30).", type: "transport" },
+      { id: "e4-6", time: "22:30 - 23:35", title: "Voo Toulouse (TLS) ➔ Lisboa (LIS)", location: "Voo Ryanair FR1799", desc: "Partida às 22:30 TLS. Aterragem às 23:35 em Lisboa (hora PT).", type: "flight" }
+    ]
+  }
+];
 
-  <script>
-    const e = React.createElement;
+const MAP_PLACES = [
+  { id: "p1", name: "Hotel Mercure Toulouse Wilson Capitole", category: "hotel", color: "#E05A47", coords: [43.6053, 1.4475], address: "7 Rue Labeda, 31000 Toulouse", desc: "Alojamento principal com pequeno-almoço incluído." },
+  { id: "p2", name: "Ponto de Encontro Excursões (29 All. Jean Jaurès)", category: "hotel", color: "#E05A47", coords: [43.6062, 1.4501], address: "29 Allée Jean Jaurès, 31000 Toulouse", desc: "Partida dos autocarros para Carcassonne, Albi e Cordes-sur-Ciel." },
+  { id: "p3", name: "Place du Capitole", category: "sight", color: "#3B82F6", coords: [43.6045, 1.4442], address: "Place du Capitole, Toulouse", desc: "Coração icónico de Toulouse, a fachada rosa e os brasões Occitanos." },
+  { id: "p4", name: "Basilique Saint-Sernin", category: "sight", color: "#3B82F6", coords: [43.6084, 1.4419], address: "Place Saint-Sernin, Toulouse", desc: "Obra-prima românica no Caminho de Santiago de Compostela." },
+  { id: "p5", name: "Couvent des Jacobins", category: "sight", color: "#3B82F6", coords: [43.6033, 1.4402], address: "Place des Jacobins, Toulouse", desc: "Famosa 'palmeira' gótica e relíquias de São Tomás de Aquino." },
+  { id: "p6", name: "Cité de Carcassonne", category: "sight", color: "#3B82F6", coords: [43.2064, 2.3630], address: "Carcassonne", desc: "Cidadela medieval com 52 torres e 3 km de muralhas duplas." },
+  { id: "p7", name: "Cathédrale Sainte-Cécile d'Albi", category: "sight", color: "#3B82F6", coords: [43.9284, 2.1428], address: "Place Sainte-Cécile, Albi", desc: "Maior catedral de tijola do mundo e pintura do Juízo Final." },
+  { id: "p8", name: "Cordes-sur-Ciel", category: "sight", color: "#3B82F6", coords: [44.0637, 1.9535], address: "Cordes-sur-Ciel", desc: "Bastida medieval no topo de uma colina com vista deslumbrante." },
+  { id: "p9", name: "Marché Victor Hugo", category: "food", color: "#22C55E", coords: [43.6067, 1.4461], address: "Place Victor Hugo, Toulouse", desc: "Mercado coberto tradicional. Excelentes restaurantes no 1º andar." },
+  { id: "p10", name: "Le Breughel", category: "food", color: "#22C55E", coords: [43.6009, 1.4415], address: "30 Rue de la Chaîne, Toulouse", desc: "Bistro clássico com ótima comida regional a preços acessíveis." },
+  { id: "p11", name: "Crêperie du Garric (Albi)", category: "food", color: "#22C55E", coords: [43.9275, 2.1435], address: "Albi", desc: "Lugar acolhedor para crepes bretões e galettes saborosas." },
+  { id: "p12", name: "Aeroporto Toulouse-Blagnac (TLS)", category: "transport", color: "#EAB308", coords: [43.6291, 1.3638], address: "Blagnac", desc: "Terminal aéreo. Ligação direta por Navette para o centro." },
+  { id: "p13", name: "Paragem Navette Jean Jaurès", category: "transport", color: "#EAB308", coords: [43.6060, 1.4495], address: "Allée Jean Jaurès, Toulouse", desc: "Paragem principal do autocarro navette do aeroporto." }
+];
 
-    // Dados da viagem
-    const TRIP_METADATA = {
-      title: "Toulouse Trip Guide 2026",
-      subtitle: "Viagem à Cidade Rosa & Occitânia",
-      startDate: "2026-10-01T17:00:00",
-      endDate: "2026-10-04T22:30:00",
-      flights: {
-        outbound: {
-          code: "FR1798",
-          airline: "Ryanair",
-          departure: "LIS 17:00",
-          arrival: "TLS 19:50",
-          date: "01/10/2026 (Quinta-feira)",
-          origin: "Lisboa (LIS)",
-          destination: "Toulouse-Blagnac (TLS)"
-        },
-        inbound: {
-          code: "FR1799",
-          airline: "Ryanair",
-          departure: "TLS 22:30",
-          arrival: "LIS 23:35",
-          date: "04/10/2026 (Domingo)",
-          origin: "Toulouse-Blagnac (TLS)",
-          destination: "Lisboa (LIS)"
-        }
-      },
-      accommodation: {
-        name: "Hotel Mercure Toulouse Centre Wilson Capitole",
-        address: "7 Rue Labeda, 31000 Toulouse",
-        regime: "APA (Pequeno-almoço incluído)",
-        checkIn: "01/10 a partir das 15:00",
-        checkOut: "04/10 até às 12:00",
-        phone: "+33 5 34 45 40 40"
-      },
-      mainMeetingPoint: {
-        name: "Ponto de Encontro dos Tours",
-        address: "29 Allée Jean Jaurès, 31000 Toulouse",
-        notes: "Local exato de partida dos autocarros para Carcassonne, Albi e Cordes-sur-Ciel."
+const RESTAURANTS_DATA = [
+  {
+    name: "Marché Victor Hugo (1º Andar)",
+    price: "€€ (15-25€)",
+    type: "Mercado & Marisco / Carnes",
+    specialty: "Prato do dia fresco, Entrecôte, Magret de Canard",
+    address: "Place Victor Hugo, Toulouse",
+    tip: "Vá por volta das 12:15 para apanhar mesa sem filas enormes."
+  },
+  {
+    name: "Le Breughel",
+    price: "€€ (18-28€)",
+    type: "Bistro Francês Tradicional",
+    specialty: "Cassoulet maison, Confit de Canard, Tarte Tatin",
+    address: "30 Rue de la Chaîne, Toulouse",
+    tip: "Excelente cassoulet servido em terrina de barro."
+  },
+  {
+    name: "La Trivalle (Carcassonne)",
+    price: "€€ (16-24€)",
+    type: "Comida de Carcassonne",
+    specialty: "Cassoulet de Carcassonne, Vinhos Minervois",
+    address: "Rue Trivalle, Carcassonne (fora da muralha)",
+    tip: "Preços muito mais económicos que nos restaurantes dentro da cidadela!"
+  },
+  {
+    name: "Crêperie du Garric (Albi)",
+    price: "€ (10-18€)",
+    type: "Creperia & Galettes",
+    specialty: "Galette de Trigo Sarraceno com Queijo Roquefort e Nozes",
+    address: "Próximo da Catedral de Albi",
+    tip: "Acompanhe com uma taça de cidra artesanal brutal."
+  }
+];
+
+const SURVIVAL_TIPS = [
+  {
+    title: "Navette Aeroporto vs Uber",
+    category: "Transportes",
+    desc: "A Navette leva 20 min até Jean Jaurès e custa 9,00 € por pessoa. O Uber custa cerca de 25-30 €. Para 2 ou mais pessoas com malas, Uber pode compensar no conforto!",
+    icon: Bus,
+    badgeBg: "bg-blue-100 text-blue-700 font-semibold"
+  },
+  {
+    title: "Truque da Água Grátis",
+    category: "Restauração",
+    desc: "Em França a água de torneira em restaurantes é 100% gratuita por lei. Diga: 'Une carafe d'eau, s'il vous plaît' (Uma carafa d'ô, sil vu plé). Não pague garrafas de água mineral se não quiser!",
+    icon: Coffee,
+    badgeBg: "bg-emerald-100 text-emerald-700 font-semibold"
+  },
+  {
+    title: "Calçado para Calçadas Medievais",
+    category: "Dica Essencial",
+    desc: "Carcassonne e Cordes-sur-Ciel têm ruas muito inclinadas e pedras medievais escorregadias. Leve sapatilhas confortáveis e antiderrapantes!",
+    icon: Navigation,
+    badgeBg: "bg-amber-100 text-amber-700 font-semibold"
+  },
+  {
+    title: "Saudações & Etiqueta Local",
+    category: "Cultura",
+    desc: "Ao entrar em qualquer loja ou café diga sempre 'Bonjour!'. É visto como falta de educação começar a falar sem cumprimentar.",
+    icon: Globe,
+    badgeBg: "bg-purple-100 text-purple-700 font-semibold"
+  }
+];
+
+const AI_KNOWLEDGE_BASE = [
+  {
+    keywords: ["cassoulet", "comer", "barato", "restaurante", "almoço", "jantar"],
+    answer: "Para provar um ótimo Cassoulet tradicional sem gastar uma fortuna: em Toulouse recomendo o **Le Breughel** (cerca de 20-25€) ou no 1º andar do **Marché Victor Hugo**. Em Carcassonne, evite os locais no centro da cidadela e vá à **Rue Trivalle** cá fora onde os preços são muito mais em conta!"
+  },
+  {
+    keywords: ["água", "pedir", "carafe", "francês", "frase"],
+    answer: "Para pedir água grátis em francês diga: *'Une carafe d'eau, s'il vous plaît'* (pronuncia-se: *Iun caraf d'ô, sil vu plé*). Se quiser café no fim da refeição, peça: *'Un café, s'il vous plaît'* (é um expresso)."
+  },
+  {
+    keywords: ["autocarro", "aeroporto", "navette", "uber", "transporte"],
+    answer: "A **Navette Aéroport** parte mesmo ao lado do vosso hotel na **Allée Jean Jaurès**. Custa 9,00€/pessoa. O trajeto demora 20-25 minutos. Se preferirem Uber, ronda os 25€-32€ consoante a hora do trânsito."
+  },
+  {
+    keywords: ["excursão", "encontro", "partida", "autocarro", "albi", "carcassonne"],
+    answer: "Todas as partidas das excursões de autocarro acontecem no endereço: **29 Allée Jean Jaurès, 31000 Toulouse**. Fica a cerca de 5-7 minutos a pé do vosso Hotel Mercure Wilson! O ponto de encontro é às 09:15 da manhã."
+  },
+  {
+    keywords: ["hotel", "mercure", "pequeno-almoço", "check-in"],
+    answer: "Ficam hospedados no **Hotel Mercure Toulouse Centre Wilson Capitole** (7 Rue Labeda). O vosso regime inclui pequeno-almoço (APA). Check-in no dia 01/10 a partir das 15h."
+  }
+];
+
+export default function App() {
+  const [activeTab, setActiveTab] = useState('dashboard');
+  const [selectedDay, setSelectedDay] = useState(1);
+  const [completedEvents, setCompletedEvents] = useState({});
+  const [mapCategory, setMapCategory] = useState('all');
+  const [selectedPlace, setSelectedPlace] = useState(null);
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  const [isTripStarted, setIsTripStarted] = useState(false);
+
+  // AI Chat state
+  const [chatMessages, setChatMessages] = useState([
+    {
+      sender: 'ai',
+      text: 'Bonjour! Sou o vosso Toulouse AI Guide 2026. Como posso ajudar na vossa viagem a Toulouse, Carcassonne e Albi?'
+    }
+  ]);
+  const [inputMessage, setInputMessage] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+
+  useEffect(() => {
+    const calculateCountdown = () => {
+      const tripDate = new Date(TRIP_METADATA.startDate).getTime();
+      const now = new Date().getTime();
+      const difference = tripDate - now;
+      if (difference <= 0) {
+        setIsTripStarted(true);
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+      } else {
+        setIsTripStarted(false);
+        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+        setTimeLeft({ days, hours, minutes, seconds });
       }
     };
+    calculateCountdown();
+    const timer = setInterval(calculateCountdown, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
-    const ITINERARY_DAYS = [
-      {
-        day: 1,
-        date: "01 Out 2026",
-        title: "Chegada & Primeiro Olhar sobre Toulouse",
-        subtitle: "Aterragem, Transfer e Jantar na Place du Capitole",
-        tag: "Chegada",
-        color: "bg-amber-500",
-        events: [
-          { id: "e1-1", time: "17:00 - 19:50", title: "Voo Lisboa (LIS) ➔ Toulouse (TLS)", location: "Aeroporto TLS", desc: "Voo Ryanair FR1798. Chegada prevista às 19:50 hora local." },
-          { id: "e1-2", time: "20:15 - 20:45", title: "Transfer Navette Aéroport ➔ Jean Jaurès", location: "Estação Jean Jaurès", desc: "Apanhar Navette no aeroporto (9,00 €). Saída na paragem Jean Jaurès." },
-          { id: "e1-3", time: "20:55", title: "Check-in no Hotel Mercure Capitole", location: "7 Rue Labeda", desc: "Instalação nos quartos. O hotel fica a 5 min a pé de Jean Jaurès." },
-          { id: "e1-4", time: "21:30 - 23:00", title: "Jantar Rápido & Passeio Noturno", location: "Place du Capitole", desc: "Jantar na famosa praça iluminada da Cidade Rosa e passeio a pé suave." }
-        ]
-      },
-      {
-        day: 2,
-        date: "02 Out 2026",
-        title: "Excursão à Cité de Carcassonne",
-        subtitle: "Cidadela Medieval, Cassoulet e Pôr do Sol no Rio Garonne",
-        tag: "Carcassonne",
-        color: "bg-rose-600",
-        events: [
-          { id: "e2-1", time: "09:15", title: "Encontro para a Excursão", location: "29 All. Jean Jaurès", desc: "Comparência no ponto de partida com calçado confortável para empedrado." },
-          { id: "e2-2", time: "09:30 - 10:45", title: "Viagem em Autocarro para Carcassonne", location: "Autocarro (75 min)", desc: "Trajeto cénico pela região de Occitânia." },
-          { id: "e2-3", time: "10:45 - 14:30", title: "Visita Cité de Carcassonne & Château Comtal", location: "Carcassonne", desc: "3h45m livres para explorar muralhas medievais, Castelo Comtal e almoço de Cassoulet." },
-          { id: "e2-4", time: "14:30 - 15:45", title: "Regresso a Toulouse", location: "Autocarro para Jean Jaurès", desc: "Chegada prevista às 15:45." },
-          { id: "e2-5", time: "16:30 - 19:00", title: "Passeio Rio Garonne & Pont Neuf", location: "Pont Neuf & Quais de la Daurade", desc: "Caminhada relaxante à beira do rio, fotografia ao pôr do sol." },
-          { id: "e2-6", time: "20:00", title: "Jantar no Le Breughel", location: "Le Breughel", desc: "Restaurante típico de bistro acolhedor com excelente qualidade/preço." }
-        ]
-      },
-      {
-        day: 3,
-        date: "03 Out 2026",
-        title: "Albi & Cordes-sur-Ciel",
-        subtitle: "Património UNESCO da Tijola Vermelha e Vila Medieval nas Nuvens",
-        tag: "Albi & Cordes",
-        color: "bg-purple-600",
-        events: [
-          { id: "e3-1", time: "09:15", title: "Encontro para a Excursão Albi & Cordes", location: "29 All. Jean Jaurès", desc: "Embarque no autocarro pontual às 09:30." },
-          { id: "e3-2", time: "09:30 - 10:30", title: "Autocarro Toulouse ➔ Albi", location: "Autocarro (1h)", desc: "Chegada a Albi, a monumental cidade episcopal." },
-          { id: "e3-3", time: "10:30 - 14:30", title: "Exploração de Albi & Almoço", location: "Catedral Sainte-Cécile", desc: "Visita à incrível Catedral fortificada de tijola. Almoço na Crêperie du Garric." },
-          { id: "e3-4", time: "14:30 - 15:00", title: "Autocarro Albi ➔ Cordes-sur-Ciel", location: "Autocarro (30 min)", desc: "Subida até à fascinante vila medieval no cimo da colina." },
-          { id: "e3-5", time: "15:00 - 17:30", title: "Visita a Cordes-sur-Ciel", location: "Vila Medieval (2.5h)", desc: "Ruas empedradas, artesanato local e vistas panorâmicas." },
-          { id: "e3-6", time: "17:30 - 18:30", title: "Regresso a Toulouse", location: "Autocarro ➔ Jean Jaurès", desc: "Chegada a Toulouse por volta das 18:30." },
-          { id: "e3-7", time: "20:00", title: "Jantar na Place Saint-Georges", location: "Place Saint-Georges", desc: "Jantar numa das praças mais acolhedoras de Toulouse." }
-        ]
-      },
-      {
-        day: 4,
-        date: "04 Out 2026",
-        title: "Coração de Toulouse & Regresso a Lisboa",
-        subtitle: "Mercado Victor Hugo, Monumentos, Compras e Voo de Regresso",
-        tag: "Toulouse & Regresso",
-        color: "bg-emerald-600",
-        events: [
-          { id: "e4-1", time: "09:30 - 11:30", title: "Marché Victor Hugo & Basílica Saint-Sernin", location: "Centro Histórico", desc: "Visita ao mercado gastronómico e à maior basílica românica da Europa." },
-          { id: "e4-2", time: "11:30 - 12:30", title: "Couvent des Jacobins", location: "Rue Lapeyrouse", desc: "Admirar a célebre 'Palmeira' de pilares medievais." },
-          { id: "e4-3", time: "12:30 - 14:00", title: "Almoço Típico no 1º Andar do Mercado Victor Hugo", location: "Marché Victor Hugo", desc: "Especialidades ultra frescas grelhadas na hora." },
-          { id: "e4-4", time: "14:30 - 18:30", title: "Compras Rue Saint-Rome & Canal du Midi", location: "Rue Saint-Rome & Canal", desc: "Últimas compras de lembranças e passeio pelo canal." },
-          { id: "e4-5", time: "20:00", title: "Navette de Regresso ao Aeroporto", location: "Paragem Jean Jaurès", desc: "Embarque na Navette para o Aeroporto TLS." },
-          { id: "e4-6", time: "22:30 - 23:35", title: "Voo Toulouse (TLS) ➔ Lisboa (LIS)", location: "Voo Ryanair FR1799", desc: "Partida às 22:30 TLS. Aterragem às 23:35 em Lisboa." }
-        ]
+  const toggleEventCheck = (id) => {
+    setCompletedEvents(prev => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const handleSendMessage = async (textToSend) => {
+    const query = textToSend || inputMessage;
+    if (!query.trim()) return;
+
+    const userMsg = { sender: 'user', text: query };
+    setChatMessages(prev => [...prev, userMsg]);
+    if (!textToSend) setInputMessage('');
+    setIsTyping(true);
+
+    setTimeout(async () => {
+      let responseText = "";
+      const apiKey = process.env.REACT_APP_GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+
+      if (apiKey) {
+        try {
+          const systemPrompt = `És o 'Toulouse AI Guide 2026', um assistente de viagens amigável e especialista na região de Occitânia, Toulouse, Carcassonne e Albi. O utilizador viaja de 1 a 4 de Outubro de 2026 com o voo Ryanair LIS-TLS e fica no Hotel Mercure Wilson Capitole. Dá respostas úteis, diretas e com tom acolhedor em Português.`;
+          const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+
+          const res = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: query }] }],
+              systemInstruction: { parts: [{ text: systemPrompt }] }
+            })
+          });
+          if (res.ok) {
+            const data = await res.json();
+            responseText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+          }
+        } catch (err) {
+          // Fallback silencioso para KB local
+        }
       }
-    ];
 
-    const RESTAURANTS_DATA = [
-      { name: "Marché Victor Hugo (1º Andar)", price: "€€ (15-25€)", type: "Mercado & Marisco / Carnes", specialty: "Prato do dia fresco, Entrecôte, Magret de Canard", tip: "Vá por volta das 12:15 para apanhar mesa." },
-      { name: "Le Breughel", price: "€€ (18-28€)", type: "Bistro Francês Tradicional", specialty: "Cassoulet maison, Confit de Canard, Tarte Tatin", tip: "Excelente cassoulet servido em terrina de barro." },
-      { name: "La Trivalle (Carcassonne)", price: "€€ (16-24€)", type: "Comida de Carcassonne", specialty: "Cassoulet de Carcassonne, Vinhos Minervois", tip: "Preços muito mais económicos que dentro da cidadela!" },
-      { name: "Crêperie du Garric (Albi)", price: "€ (10-18€)", type: "Creperia & Galettes", specialty: "Galette de Trigo Sarraceno com Queijo Roquefort", tip: "Acompanhe com uma taça de cidra artesanal." }
-    ];
+      if (!responseText) {
+        const lower = query.toLowerCase();
+        const found = AI_KNOWLEDGE_BASE.find(item =>
+          item.keywords.some(kw => lower.includes(kw))
+        );
+        if (found) {
+          responseText = found.answer;
+        } else {
+          responseText = `Tenho todas as informações do vosso itinerário para 1-4 de Outubro de 2026! Pode perguntar-me sobre transportes do aeroporto, restaurante em Carcassonne, pontos de encontro para as excursões às 09:15 ou vocabulário útil em francês.`;
+        }
+      }
+      setChatMessages(prev => [...prev, { sender: 'ai', text: responseText }]);
+      setIsTyping(false);
+    }, 800);
+  };
 
-    function App() {
-      const [activeTab, setActiveTab] = React.useState('dashboard');
-      const [selectedDay, setSelectedDay] = React.useState(1);
-      const [completedEvents, setCompletedEvents] = React.useState({});
+  const filteredPlaces = MAP_PLACES.filter(p => mapCategory === 'all' || p.category === mapCategory);
 
-      const toggleEventCheck = (id) => {
-        setCompletedEvents(prev => ({ ...prev, [id]: !prev[id] }));
-      };
+  return (
+    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans flex flex-col md:flex-row">
+      <aside className="hidden md:flex flex-col w-64 bg-slate-900 border-r border-slate-800 p-4 sticky top-0 h-screen justify-between z-30">
+        <div>
+          <div className="flex items-center space-x-3 px-3 py-4 mb-6">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-500 to-amber-500 flex items-center justify-center shadow-lg shadow-rose-500/30">
+              <Compass className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h1 className="font-bold text-lg text-white leading-tight">Toulouse 2026</h1>
+              <span className="text-xs text-rose-400 font-medium">Trip Guide • 1-4 Out</span>
+            </div>
+          </div>
+          <nav className="space-y-1.5">
+            <button
+              onClick={() => setActiveTab('dashboard')}
+              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+                activeTab === 'dashboard'
+                  ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30 shadow-md'
+                  : 'text-slate-400 hover:bg-slate-800/60 hover:text-slate-200'
+              }`}
+            >
+              <Sparkles className="w-5 h-5 text-amber-400" />
+              <span>Resumo & Voo</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('itinerary')}
+              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+                activeTab === 'itinerary'
+                  ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30 shadow-md'
+                  : 'text-slate-400 hover:bg-slate-800/60 hover:text-slate-200'
+              }`}
+            >
+              <Calendar className="w-5 h-5 text-rose-400" />
+              <span>Itinerário 4 Dias</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('map')}
+              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+                activeTab === 'map'
+                  ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30 shadow-md'
+                  : 'text-slate-400 hover:bg-slate-800/60 hover:text-slate-200'
+              }`}
+            >
+              <MapPin className="w-5 h-5 text-blue-400" />
+              <span>Mapa Interativo</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('food')}
+              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+                activeTab === 'food'
+                  ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30 shadow-md'
+                  : 'text-slate-400 hover:bg-slate-800/60 hover:text-slate-200'
+              }`}
+            >
+              <Utensils className="w-5 h-5 text-emerald-400" />
+              <span>Gastronomia & Dicas</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('ai')}
+              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+                activeTab === 'ai'
+                  ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30 shadow-md'
+                  : 'text-slate-400 hover:bg-slate-800/60 hover:text-slate-200'
+              }`}
+            >
+              <Bot className="w-5 h-5 text-purple-400" />
+              <span>Toulouse AI Concierge</span>
+            </button>
+          </nav>
+        </div>
+        <div className="bg-slate-800/70 border border-slate-700/60 p-3.5 rounded-2xl">
+          <div className="flex items-center space-x-2 text-rose-400 text-xs font-semibold uppercase tracking-wider mb-1">
+            <MapPin className="w-3.5 h-3.5" />
+            <span>Ponto de Encontro</span>
+          </div>
+          <p className="text-xs text-white font-medium">29 Allée Jean Jaurès</p>
+          <p className="text-[11px] text-slate-400 mt-1">Comparência às 09:15 nos dias de excursão.</p>
+        </div>
+      </aside>
 
-      const currentDayObj = ITINERARY_DAYS.find(d => d.day === selectedDay);
+      <main className="flex-1 overflow-y-auto pb-24 md:pb-8 p-4 md:p-8 max-w-7xl mx-auto w-full">
+        <div className="md:hidden flex items-center justify-between mb-6 pb-4 border-b border-slate-800">
+          <div className="flex items-center space-x-3">
+            <div className="w-9 h-9 rounded-xl bg-rose-500/20 flex items-center justify-center border border-rose-500/30">
+              <Compass className="w-5 h-5 text-rose-400" />
+            </div>
+            <div>
+              <h1 className="font-bold text-base text-white">Toulouse Trip 2026</h1>
+              <p className="text-xs text-slate-400">1 a 4 de Outubro • 4 Dias</p>
+            </div>
+          </div>
+          <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30">
+            Occitânia
+          </span>
+        </div>
 
-      return e('div', { className: 'min-h-screen pb-20 md:pb-8' },
-        // Header Principal
-        e('header', { className: 'bg-slate-900 border-b border-slate-800 p-4 md:px-8 shadow-lg' },
-          e('div', { className: 'max-w-6xl mx-auto flex justify-between items-center' },
-            e('div', { className: 'flex items-center space-x-3' },
-              e('div', { className: 'w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-500 to-amber-500 flex items-center justify-center font-bold text-white shadow-md' }, '✈️'),
-              e('div', null,
-                e('h1', { className: 'font-bold text-lg md:text-xl text-white' }, TRIP_METADATA.title),
-                e('p', { className: 'text-xs text-rose-400 font-medium' }, TRIP_METADATA.subtitle)
-              )
-            ),
-            e('span', { className: 'text-xs font-semibold px-3 py-1 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30' }, '01-04 Outubro 2026')
-          )
-        ),
+        {activeTab === 'dashboard' && (
+          <div className="space-y-6 animate-fadeIn">
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-rose-900/60 via-purple-900/50 to-slate-900 p-6 md:p-8 border border-rose-500/30 shadow-xl backdrop-blur-md">
+              <div className="absolute top-0 right-0 -mt-8 -mr-8 w-64 h-64 bg-rose-500/10 rounded-full blur-3xl pointer-events-none" />
+              <div className="relative z-10 flex flex-col lg:flex-row justify-between lg:items-center gap-6">
+                <div>
+                  <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 mb-3">
+                    <Sparkles className="w-3.5 h-3.5" />
+                    Viagem Confirmada • Outubro 2026
+                  </span>
+                  <h2 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
+                    Viagem a Toulouse, Carcassonne & Albi
+                  </h2>
+                  <p className="text-slate-300 text-sm mt-1 max-w-xl">
+                    4 dias de exploração intensa na Cidade Rosa, cidadelas medievais e a gastronomia única do Sudoeste de França.
+                  </p>
+                </div>
+                <div className="bg-slate-950/70 border border-slate-800/80 p-4 rounded-2xl flex items-center gap-4 self-start lg:self-auto shadow-inner">
+                  <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-rose-500/20 text-rose-400 border border-rose-500/30">
+                    <Clock className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <span className="text-xs text-slate-400 uppercase tracking-wider block font-semibold">
+                      {isTripStarted ? "A Viagem Começou!" : "Contagem Decrescente"}
+                    </span>
+                    {!isTripStarted ? (
+                      <div className="flex gap-2 text-white font-mono text-lg font-bold mt-0.5">
+                        <div className="text-center"><span className="text-rose-400">{timeLeft.days}</span><span className="text-[10px] text-slate-500 block -mt-1 font-sans">dias</span></div>
+                        <span>:</span>
+                        <div className="text-center"><span className="text-amber-400">{String(timeLeft.hours).padStart(2, '0')}</span><span className="text-[10px] text-slate-500 block -mt-1 font-sans">hrs</span></div>
+                        <span>:</span>
+                        <div className="text-center"><span className="text-emerald-400">{String(timeLeft.minutes).padStart(2, '0')}</span><span className="text-[10px] text-slate-500 block -mt-1 font-sans">min</span></div>
+                        <span>:</span>
+                        <div className="text-center"><span className="text-blue-400">{String(timeLeft.seconds).padStart(2, '0')}</span><span className="text-[10px] text-slate-500 block -mt-1 font-sans">seg</span></div>
+                      </div>
+                    ) : (
+                      <p className="text-sm font-semibold text-emerald-400 mt-1">Aproveitem a viagem!</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
 
-        // Navegação Desktop / Tabs
-        e('div', { className: 'bg-slate-900/60 border-b border-slate-800 sticky top-0 z-20 backdrop-blur-md' },
-          e('div', { className: 'max-w-6xl mx-auto flex space-x-2 p-2 overflow-x-auto' },
-            [
-              { id: 'dashboard', label: '⚡ Resumo & Voo' },
-              { id: 'itinerary', label: '📅 Itinerário 4 Dias' },
-              { id: 'food', label: '🍷 Gastronomia & Dicas' }
-            ].map(tab => 
-              e('button', {
-                key: tab.id,
-                onClick: () => setActiveTab(tab.id),
-                className: `px-4 py-2 rounded-xl text-xs font-bold transition whitespace-nowrap ${
-                  activeTab === tab.id
-                    ? 'bg-rose-500 text-white shadow-md'
-                    : 'text-slate-400 hover:bg-slate-800 hover:text-white'
-                }`
-              }, tab.label)
-            )
-          )
-        ),
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="bg-slate-900/80 border border-slate-800 p-5 rounded-2xl relative overflow-hidden group hover:border-slate-700 transition">
+                <div className="flex justify-between items-start mb-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="p-2.5 rounded-xl bg-blue-500/20 text-blue-400 border border-blue-500/30">
+                      <Plane className="w-5 h-5 transform rotate-45" />
+                    </div>
+                    <div>
+                      <span className="text-xs text-slate-400 block font-medium">Voo de Ida</span>
+                      <h4 className="font-bold text-white text-base">{TRIP_METADATA.flights.outbound.code} • Ryanair</h4>
+                    </div>
+                  </div>
+                  <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/30">
+                    01/10/2026
+                  </span>
+                </div>
+                <div className="flex justify-between items-center py-3 border-y border-slate-800/80 my-2">
+                  <div>
+                    <span className="text-xs text-slate-400">Origem</span>
+                    <p className="text-lg font-extrabold text-white">{TRIP_METADATA.flights.outbound.departure}</p>
+                    <p className="text-xs text-slate-400">{TRIP_METADATA.flights.outbound.origin}</p>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <span className="text-[10px] text-slate-500 font-medium">2h 50m</span>
+                    <div className="w-20 h-0.5 bg-slate-700 relative my-1">
+                      <div className="absolute left-1/2 -top-1.5 -translate-x-1/2 w-3 h-3 rounded-full bg-blue-400 border-2 border-slate-900" />
+                    </div>
+                    <span className="text-[10px] text-emerald-400 font-medium">Direto</span>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-xs text-slate-400">Destino</span>
+                    <p className="text-lg font-extrabold text-white">{TRIP_METADATA.flights.outbound.arrival}</p>
+                    <p className="text-xs text-slate-400">{TRIP_METADATA.flights.outbound.destination}</p>
+                  </div>
+                </div>
+              </div>
 
-        // Conteúdo Principal
-        e('main', { className: 'max-w-6xl mx-auto p-4 md:p-6 space-y-6' },
-          
-          // TAB: DASHBOARD
-          activeTab === 'dashboard' && e('div', { className: 'space-y-6' },
-            e('div', { className: 'rounded-3xl bg-gradient-to-r from-rose-900/50 via-purple-900/40 to-slate-900 p-6 border border-rose-500/30 shadow-xl' },
-              e('h2', { className: 'text-2xl font-extrabold text-white mb-2' }, 'Viagem Confirmada a Toulouse & Occitânia'),
-              e('p', { className: 'text-xs md:text-sm text-slate-300 max-w-2xl' }, 
-                '4 dias inesquecíveis a explorar a Cidade Rosa, as muralhas de Carcassonne, o património de Albi e as ruazinhas de Cordes-sur-Ciel.'
-              )
-            ),
+              <div className="bg-slate-900/80 border border-slate-800 p-5 rounded-2xl relative overflow-hidden group hover:border-slate-700 transition">
+                <div className="flex justify-between items-start mb-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="p-2.5 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30">
+                      <Plane className="w-5 h-5 transform -rotate-45" />
+                    </div>
+                    <div>
+                      <span className="text-xs text-slate-400 block font-medium">Voo de Regresso</span>
+                      <h4 className="font-bold text-white text-base">{TRIP_METADATA.flights.inbound.code} • Ryanair</h4>
+                    </div>
+                  </div>
+                  <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30">
+                    04/10/2026
+                  </span>
+                </div>
+                <div className="flex justify-between items-center py-3 border-y border-slate-800/80 my-2">
+                  <div>
+                    <span className="text-xs text-slate-400">Origem</span>
+                    <p className="text-lg font-extrabold text-white">{TRIP_METADATA.flights.inbound.departure}</p>
+                    <p className="text-xs text-slate-400">{TRIP_METADATA.flights.inbound.origin}</p>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <span className="text-[10px] text-slate-500 font-medium">2h 05m</span>
+                    <div className="w-20 h-0.5 bg-slate-700 relative my-1">
+                      <div className="absolute left-1/2 -top-1.5 -translate-x-1/2 w-3 h-3 rounded-full bg-amber-400 border-2 border-slate-900" />
+                    </div>
+                    <span className="text-[10px] text-emerald-400 font-medium">Direto</span>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-xs text-slate-400">Destino</span>
+                    <p className="text-lg font-extrabold text-white">{TRIP_METADATA.flights.inbound.arrival}</p>
+                    <p className="text-xs text-slate-400">{TRIP_METADATA.flights.inbound.destination}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-            e('div', { className: 'grid grid-cols-1 md:grid-cols-2 gap-4' },
-              // Cartão Voo Ida
-              e('div', { className: 'bg-slate-900 border border-slate-800 p-5 rounded-2xl' },
-                e('div', { className: 'flex justify-between items-center mb-3' },
-                  e('span', { className: 'text-xs font-bold text-blue-400 uppercase tracking-wider' }, '✈️ Voo de Ida'),
-                  e('span', { className: 'text-xs text-slate-400' }, TRIP_METADATA.flights.outbound.date)
-                ),
-                e('h3', { className: 'text-lg font-bold text-white' }, `${TRIP_METADATA.flights.outbound.code} • ${TRIP_METADATA.flights.outbound.airline}`),
-                e('div', { className: 'flex justify-between items-center mt-3 pt-3 border-t border-slate-800 text-sm' },
-                  e('div', null, e('p', { className: 'font-extrabold text-white' }, TRIP_METADATA.flights.outbound.departure), e('p', { className: 'text-xs text-slate-400' }, TRIP_METADATA.flights.outbound.origin)),
-                  e('span', { className: 'text-xs text-emerald-400 font-semibold' }, '➔ Direto ➔'),
-                  e('div', { className: 'text-right' }, e('p', { className: 'font-extrabold text-white' }, TRIP_METADATA.flights.outbound.arrival), e('p', { className: 'text-xs text-slate-400' }, TRIP_METADATA.flights.outbound.destination))
-                )
-              ),
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="bg-slate-900/80 border border-slate-800 p-5 rounded-2xl flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center space-x-3 mb-3">
+                    <div className="p-2.5 rounded-xl bg-purple-500/20 text-purple-400 border border-purple-500/30">
+                      <Hotel className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <span className="text-xs text-purple-400 font-semibold uppercase">Alojamento Principal</span>
+                      <h4 className="font-bold text-white text-base leading-snug">{TRIP_METADATA.accommodation.name}</h4>
+                    </div>
+                  </div>
+                  <div className="space-y-2 text-xs text-slate-300 mt-3">
+                    <p className="flex items-center gap-2">
+                      <MapPin className="w-4 h-4 text-slate-400 flex-shrink-0" />
+                      <span>{TRIP_METADATA.accommodation.address}</span>
+                    </p>
+                    <p className="flex items-center gap-2">
+                      <Coffee className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                      <span className="text-emerald-300 font-medium">{TRIP_METADATA.accommodation.regime}</span>
+                    </p>
+                    <p className="flex items-center gap-2">
+                      <PhoneCall className="w-4 h-4 text-slate-400 flex-shrink-0" />
+                      <span>{TRIP_METADATA.accommodation.phone}</span>
+                    </p>
+                  </div>
+                </div>
+                <div className="mt-4 pt-3 border-t border-slate-800 flex justify-between items-center text-xs">
+                  <span className="text-slate-400">Check-in: 01/10 (15h)</span>
+                  <a
+                    href={`https://maps.google.com/?q=${encodeURIComponent(TRIP_METADATA.accommodation.address)}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-rose-400 hover:text-rose-300 font-semibold flex items-center gap-1"
+                  >
+                    Abrir no GPS <ExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
+              </div>
 
-              // Cartão Voo Regresso
-              e('div', { className: 'bg-slate-900 border border-slate-800 p-5 rounded-2xl' },
-                e('div', { className: 'flex justify-between items-center mb-3' },
-                  e('span', { className: 'text-xs font-bold text-amber-400 uppercase tracking-wider' }, '✈️ Voo de Regresso'),
-                  e('span', { className: 'text-xs text-slate-400' }, TRIP_METADATA.flights.inbound.date)
-                ),
-                e('h3', { className: 'text-lg font-bold text-white' }, `${TRIP_METADATA.flights.inbound.code} • ${TRIP_METADATA.flights.inbound.airline}`),
-                e('div', { className: 'flex justify-between items-center mt-3 pt-3 border-t border-slate-800 text-sm' },
-                  e('div', null, e('p', { className: 'font-extrabold text-white' }, TRIP_METADATA.flights.inbound.departure), e('p', { className: 'text-xs text-slate-400' }, TRIP_METADATA.flights.inbound.origin)),
-                  e('span', { className: 'text-xs text-emerald-400 font-semibold' }, '➔ Direto ➔'),
-                  e('div', { className: 'text-right' }, e('p', { className: 'font-extrabold text-white' }, TRIP_METADATA.flights.inbound.arrival), e('p', { className: 'text-xs text-slate-400' }, TRIP_METADATA.flights.inbound.destination))
-                )
-              )
-            ),
+              <div className="bg-slate-900/80 border border-rose-500/30 p-5 rounded-2xl flex flex-col justify-between relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-rose-500/5 rounded-full blur-xl pointer-events-none" />
+                <div>
+                  <div className="flex items-center space-x-3 mb-3">
+                    <div className="p-2.5 rounded-xl bg-rose-500/20 text-rose-400 border border-rose-500/30">
+                      <MapPin className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <span className="text-xs text-rose-400 font-semibold uppercase">Ponto de Partida dos Tours</span>
+                      <h4 className="font-bold text-white text-base leading-snug">{TRIP_METADATA.mainMeetingPoint.name}</h4>
+                    </div>
+                  </div>
+                  <div className="space-y-2 text-xs text-slate-300 mt-3">
+                    <p className="font-semibold text-rose-300 text-sm">{TRIP_METADATA.mainMeetingPoint.address}</p>
+                    <p className="text-slate-400">{TRIP_METADATA.mainMeetingPoint.notes}</p>
+                  </div>
+                </div>
+                <div className="mt-4 pt-3 border-t border-slate-800 flex justify-between items-center text-xs">
+                  <span className="text-amber-400 font-medium flex items-center gap-1">
+                    <AlertCircle className="w-3.5 h-3.5" /> Estar às 09:15
+                  </span>
+                  <button
+                    onClick={() => {
+                      setActiveTab('map');
+                      setSelectedPlace(MAP_PLACES.find(p => p.id === 'p2'));
+                    }}
+                    className="text-rose-400 hover:text-rose-300 font-semibold flex items-center gap-1"
+                  >
+                    Ver no Mapa <ChevronRight className="w-3 h-3" />
+                  </button>
+                </div>
+              </div>
+            </div>
 
-            e('div', { className: 'grid grid-cols-1 md:grid-cols-2 gap-4' },
-              // Hotel
-              e('div', { className: 'bg-slate-900 border border-slate-800 p-5 rounded-2xl' },
-                e('span', { className: 'text-xs font-bold text-purple-400 uppercase tracking-wider block mb-1' }, '🏨 Alojamento'),
-                e('h4', { className: 'font-bold text-white text-base' }, TRIP_METADATA.accommodation.name),
-                e('p', { className: 'text-xs text-slate-300 mt-2' }, `📍 ${TRIP_METADATA.accommodation.address}`),
-                e('p', { className: 'text-xs text-emerald-400 mt-1 font-semibold' }, `🍳 ${TRIP_METADATA.accommodation.regime}`),
-                e('p', { className: 'text-xs text-slate-400 mt-1' }, `📞 ${TRIP_METADATA.accommodation.phone}`)
-              ),
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              <button
+                onClick={() => setActiveTab('itinerary')}
+                className="bg-slate-900 border border-slate-800 p-4 rounded-2xl text-left hover:border-slate-700 transition group"
+              >
+                <div className="w-8 h-8 rounded-lg bg-rose-500/20 text-rose-400 flex items-center justify-center mb-2">
+                  <Calendar className="w-4 h-4" />
+                </div>
+                <h5 className="font-semibold text-sm text-white group-hover:text-rose-400 transition">Ver Itinerário</h5>
+                <p className="text-[11px] text-slate-400 mt-0.5">Timeline dos 4 dias</p>
+              </button>
+              <button
+                onClick={() => setActiveTab('map')}
+                className="bg-slate-900 border border-slate-800 p-4 rounded-2xl text-left hover:border-slate-700 transition group"
+              >
+                <div className="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center mb-2">
+                  <MapPin className="w-4 h-4" />
+                </div>
+                <h5 className="font-semibold text-sm text-white group-hover:text-blue-400 transition">Explorar Mapa</h5>
+                <p className="text-[11px] text-slate-400 mt-0.5">Monumentos & Locais</p>
+              </button>
+              <button
+                onClick={() => setActiveTab('food')}
+                className="bg-slate-900 border border-slate-800 p-4 rounded-2xl text-left hover:border-slate-700 transition group"
+              >
+                <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center mb-2">
+                  <Utensils className="w-4 h-4" />
+                </div>
+                <h5 className="font-semibold text-sm text-white group-hover:text-emerald-400 transition">Onde Comer</h5>
+                <p className="text-[11px] text-slate-400 mt-0.5">Cassoulet & Mercado</p>
+              </button>
+              <button
+                onClick={() => setActiveTab('ai')}
+                className="bg-slate-900 border border-slate-800 p-4 rounded-2xl text-left hover:border-slate-700 transition group"
+              >
+                <div className="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center mb-2">
+                  <Bot className="w-4 h-4" />
+                </div>
+                <h5 className="font-semibold text-sm text-white group-hover:text-purple-400 transition">IA Concierge</h5>
+                <p className="text-[11px] text-slate-400 mt-0.5">Dúvidas & Tradução</p>
+              </button>
+            </div>
+          </div>
+        )}
 
-              // Ponto de Encontro Excursões
-              e('div', { className: 'bg-slate-900 border border-rose-500/40 p-5 rounded-2xl' },
-                e('span', { className: 'text-xs font-bold text-rose-400 uppercase tracking-wider block mb-1' }, '📍 Ponto de Partida dos Tours'),
-                e('h4', { className: 'font-bold text-white text-base' }, TRIP_METADATA.mainMeetingPoint.name),
-                e('p', { className: 'text-xs text-rose-300 font-semibold mt-2' }, TRIP_METADATA.mainMeetingPoint.address),
-                e('p', { className: 'text-xs text-slate-400 mt-1' }, TRIP_METADATA.mainMeetingPoint.notes),
-                e('p', { className: 'text-xs text-amber-400 mt-2 font-bold' }, '⏰ Estar no local sempre às 09:15 nos dias de excursão!')
-              )
-            )
-          ),
+        {activeTab === 'itinerary' && (
+          <div className="space-y-6 animate-fadeIn">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div>
+                <h2 className="text-2xl font-bold text-white">Itinerário Detalhado</h2>
+                <p className="text-xs text-slate-400">Seleccione cada dia para ver horários, pontos de encontro e sugestões.</p>
+              </div>
+              <div className="flex items-center gap-2 overflow-x-auto pb-1">
+                {ITINERARY_DAYS.map((dayData) => (
+                  <button
+                    key={dayData.day}
+                    onClick={() => setSelectedDay(dayData.day)}
+                    className={`px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition whitespace-nowrap ${
+                      selectedDay === dayData.day
+                        ? 'bg-rose-500 text-white shadow-lg shadow-rose-500/30'
+                        : 'bg-slate-900 text-slate-400 hover:bg-slate-800 hover:text-white border border-slate-800'
+                    }`}
+                  >
+                    <span>Dia {dayData.day}</span>
+                    <span className="text-[10px] opacity-75">({dayData.date.split(' ')[0]} Out)</span>
+                  </button>
+                ))}
+              </div>
+            </div>
 
-          // TAB: ITINERARIO
-          activeTab === 'itinerary' && e('div', { className: 'space-y-6' },
-            e('div', { className: 'flex space-x-2 overflow-x-auto pb-2' },
-              ITINERARY_DAYS.map(day => 
-                e('button', {
-                  key: day.day,
-                  onClick: () => setSelectedDay(day.day),
-                  className: `px-4 py-2.5 rounded-xl text-xs font-bold transition flex flex-col items-center ${
-                    selectedDay === day.day
-                      ? 'bg-rose-500 text-white shadow-lg shadow-rose-500/30'
-                      : 'bg-slate-900 text-slate-400 hover:bg-slate-800 border border-slate-800'
-                  }`
-                },
-                  e('span', null, `Dia ${day.day}`),
-                  e('span', { className: 'text-[10px] opacity-80' }, day.date.split(' ')[0] + ' Out')
-                )
-              )
-            ),
+            {(() => {
+              const currentDayObj = ITINERARY_DAYS.find(d => d.day === selectedDay);
+              return (
+                <div className="bg-slate-900 border border-slate-800 p-5 rounded-2xl flex justify-between items-center">
+                  <div>
+                    <span className={`inline-block px-2.5 py-0.5 rounded-md text-[11px] font-bold text-white mb-1 ${currentDayObj.color}`}>
+                      {currentDayObj.tag}
+                    </span>
+                    <h3 className="text-lg font-bold text-white">{currentDayObj.title}</h3>
+                    <p className="text-xs text-slate-400">{currentDayObj.subtitle}</p>
+                  </div>
+                  <div className="text-right hidden sm:block">
+                    <span className="text-xs text-slate-400 block">Progresso do Dia</span>
+                    <span className="text-sm font-bold text-rose-400">
+                      {currentDayObj.events.filter(e => completedEvents[e.id]).length} / {currentDayObj.events.length} concluídos
+                    </span>
+                  </div>
+                </div>
+              );
+            })()}
 
-            e('div', { className: 'bg-slate-900 border border-slate-800 p-5 rounded-2xl' },
-              e('span', { className: `inline-block px-2.5 py-0.5 rounded text-[11px] font-bold text-white mb-2 ${currentDayObj.color}` }, currentDayObj.tag),
-              e('h3', { className: 'text-lg font-bold text-white' }, currentDayObj.title),
-              e('p', { className: 'text-xs text-slate-400' }, currentDayObj.subtitle)
-            ),
-
-            e('div', { className: 'space-y-3' },
-              currentDayObj.events.map(event => {
+            <div className="relative border-l-2 border-slate-800 ml-4 md:ml-6 pl-6 space-y-6 py-2">
+              {ITINERARY_DAYS.find(d => d.day === selectedDay).events.map((event) => {
                 const isChecked = completedEvents[event.id];
-                return e('div', {
-                  key: event.id,
-                  onClick: () => toggleEventCheck(event.id),
-                  className: `p-4 rounded-2xl border transition cursor-pointer flex items-start space-x-3.5 ${
-                    isChecked ? 'bg-slate-900/40 border-slate-800 opacity-50' : 'bg-slate-900 border-slate-800 hover:border-slate-700'
-                  }`
-                },
-                  e('div', { className: `w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 flex-shrink-0 border ${
-                    isChecked ? 'bg-emerald-500 border-emerald-400 text-white' : 'border-slate-700 text-slate-500'
-                  }` }, isChecked ? '✓' : ''),
-                  e('div', { className: 'flex-1' },
-                    e('div', { className: 'flex justify-between items-center mb-1' },
-                      e('span', { className: 'text-xs font-mono font-bold text-rose-400 bg-slate-800 px-2 py-0.5 rounded' }, event.time),
-                      e('span', { className: 'text-[11px] text-slate-400 font-medium' }, `📍 ${event.location}`)
-                    ),
-                    e('h4', { className: `text-sm font-bold ${isChecked ? 'line-through text-slate-400' : 'text-white'}` }, event.title),
-                    e('p', { className: 'text-xs text-slate-300 mt-1' }, event.desc)
-                  )
+                return (
+                  <div key={event.id} className="relative group">
+                    <button
+                      onClick={() => toggleEventCheck(event.id)}
+                      className={`absolute -left-[37px] top-1 w-6 h-6 rounded-full flex items-center justify-center border-2 transition ${
+                        isChecked
+                          ? 'bg-emerald-500 border-emerald-400 text-white'
+                          : 'bg-slate-900 border-slate-700 text-slate-500 group-hover:border-rose-400'
+                      }`}
+                    >
+                      {isChecked ? <Check className="w-3.5 h-3.5" /> : <Circle className="w-3 h-3" />}
+                    </button>
+                    <div className={`p-4 md:p-5 rounded-2xl border transition ${
+                      isChecked
+                        ? 'bg-slate-900/40 border-slate-800 opacity-60'
+                        : 'bg-slate-900/90 border-slate-800 hover:border-slate-700 shadow-md'
+                    }`}>
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs font-mono font-semibold px-2.5 py-1 rounded-lg bg-slate-800 text-rose-400 border border-slate-700">
+                            {event.time}
+                          </span>
+                          <span className="text-xs text-slate-400 font-medium flex items-center gap-1">
+                            <MapPin className="w-3.5 h-3.5 text-slate-500" />
+                            {event.location}
+                          </span>
+                        </div>
+                        {event.type === 'meet' && (
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30 self-start sm:self-auto">
+                            PARTIDA 09:15 PONTUAL
+                          </span>
+                        )}
+                      </div>
+                      <h4 className={`text-base font-bold ${isChecked ? 'line-through text-slate-400' : 'text-white'}`}>
+                        {event.title}
+                      </h4>
+                      <p className="text-xs text-slate-300 mt-1 leading-relaxed">
+                        {event.desc}
+                      </p>
+                    </div>
+                  </div>
                 );
-              })
-            )
-          ),
+              })}
+            </div>
+          </div>
+        )}
 
-          // TAB: GASTRONOMIA
-          activeTab === 'food' && e('div', { className: 'space-y-6' },
-            e('h2', { className: 'text-xl font-bold text-white' }, '🍷 Gastronomia & Dicas Recomendadas'),
-            
-            e('div', { className: 'grid grid-cols-1 md:grid-cols-2 gap-4' },
-              RESTAURANTS_DATA.map((resto, idx) => 
-                e('div', { key: idx, className: 'bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-2' },
-                  e('div', { className: 'flex justify-between items-start' },
-                    e('h3', { className: 'font-bold text-white text-base' }, resto.name),
-                    e('span', { className: 'text-xs font-mono font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' }, resto.price)
-                  ),
-                  e('p', { className: 'text-xs text-slate-400 font-medium' }, resto.type),
-                  e('div', { className: 'bg-slate-950 p-3 rounded-xl text-xs space-y-1 text-slate-300 border border-slate-800' },
-                    e('p', null, e('strong', { className: 'text-slate-400' }, 'Prato: '), resto.specialty),
-                    e('p', { className: 'text-amber-300' }, e('strong', { className: 'text-amber-400' }, 'Dica: '), resto.tip)
-                  )
-                )
-              )
-            ),
+        {activeTab === 'map' && (
+          <div className="space-y-6 animate-fadeIn">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div>
+                <h2 className="text-2xl font-bold text-white">Mapa dos Locais da Viagem</h2>
+                <p className="text-xs text-slate-400">Pontos de interesse em Toulouse, Carcassonne, Albi e Cordes-sur-Ciel.</p>
+              </div>
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
+                <button
+                  onClick={() => setMapCategory('all')}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition ${
+                    mapCategory === 'all' ? 'bg-white text-slate-900' : 'bg-slate-900 text-slate-400 border border-slate-800'
+                  }`}
+                >
+                  Todos
+                </button>
+                <button
+                  onClick={() => setMapCategory('hotel')}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 ${
+                    mapCategory === 'hotel' ? 'bg-rose-500 text-white' : 'bg-slate-900 text-rose-400 border border-slate-800'
+                  }`}
+                >
+                  <span className="w-2 h-2 rounded-full bg-rose-500" /> Hotel & Ponto Encontro
+                </button>
+                <button
+                  onClick={() => setMapCategory('sight')}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 ${
+                    mapCategory === 'sight' ? 'bg-blue-500 text-white' : 'bg-slate-900 text-blue-400 border border-slate-800'
+                  }`}
+                >
+                  <span className="w-2 h-2 rounded-full bg-blue-500" /> Monumentos
+                </button>
+                <button
+                  onClick={() => setMapCategory('food')}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 ${
+                    mapCategory === 'food' ? 'bg-emerald-500 text-white' : 'bg-slate-900 text-emerald-400 border border-slate-800'
+                  }`}
+                >
+                  <span className="w-2 h-2 rounded-full bg-emerald-500" /> Restaurantes
+                </button>
+                <button
+                  onClick={() => setMapCategory('transport')}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 ${
+                    mapCategory === 'transport' ? 'bg-amber-500 text-slate-950' : 'bg-slate-900 text-amber-400 border border-slate-800'
+                  }`}
+                >
+                  <span className="w-2 h-2 rounded-full bg-amber-500" /> Transportes
+                </button>
+              </div>
+            </div>
 
-            e('div', { className: 'bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-3' },
-              e('h3', { className: 'text-sm font-bold text-rose-400 uppercase tracking-wider' }, '💡 Dica da Água Grátis em França'),
-              e('p', { className: 'text-xs text-slate-300 leading-relaxed' }, 
-                'Por lei em França, a água da torneira em restaurantes é 100% gratuita! Para pedir uma jarra de água grátis na refeição diga ao empregado: ',
-                e('span', { className: 'font-bold text-amber-300 italic' }, '"Une carafe d\'eau, s\'il vous plaît"'),
-                ' (pronuncia-se: Iun caraf d\'ô, sil vu plé).'
-              )
-            )
-          )
-        )
-      );
-    }
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden relative shadow-2xl h-[420px] md:h-[500px] flex flex-col md:flex-row">
+              <div className="flex-1 bg-slate-950 relative overflow-hidden flex items-center justify-center p-4">
+                <div className="absolute inset-0 bg-[radial-gradient(#334155_1px,transparent_1px)] [background-size:24px_24px] opacity-30" />
+                <div className="absolute top-4 left-4 z-10 bg-slate-900/90 backdrop-blur border border-slate-800 px-3 py-2 rounded-xl text-xs text-slate-300">
+                  <span className="font-bold text-white block">Região da Occitânia</span>
+                  <span>Toulouse • Carcassonne • Albi</span>
+                </div>
+                <div className="relative w-full h-full max-w-lg mx-auto flex flex-wrap content-center justify-center gap-3 p-4 z-10 overflow-y-auto">
+                  {filteredPlaces.map((place) => (
+                    <button
+                      key={place.id}
+                      onClick={() => setSelectedPlace(place)}
+                      className={`p-3 rounded-2xl border text-left transition transform hover:scale-105 ${
+                        selectedPlace?.id === place.id
+                          ? 'bg-slate-800 border-white ring-2 ring-rose-500 shadow-xl'
+                          : 'bg-slate-900/90 border-slate-800 hover:border-slate-700'
+                      }`}
+                    >
+                      <div className="flex items-center space-x-2">
+                        <div
+                          className="w-3.5 h-3.5 rounded-full flex-shrink-0"
+                          style={{ backgroundColor: place.color }}
+                        />
+                        <span className="font-bold text-xs text-white truncate max-w-[140px]">{place.name}</span>
+                      </div>
+                      <p className="text-[10px] text-slate-400 mt-1 line-clamp-1">{place.address}</p>
+                    </button>
+                  ))}
+                </div>
+              </div>
 
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(e(App));
-  </script>
-</body>
-</html>
+              <div className="w-full md:w-80 bg-slate-900 border-t md:border-t-0 md:border-l border-slate-800 p-5 flex flex-col justify-between">
+                {selectedPlace ? (
+                  <div>
+                    <div className="flex items-center space-x-2 mb-2">
+                      <span
+                        className="w-3 h-3 rounded-full"
+                        style={{ backgroundColor: selectedPlace.color }}
+                      />
+                      <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                        {selectedPlace.category}
+                      </span>
+                    </div>
+                    <h3 className="text-lg font-bold text-white mb-1">{selectedPlace.name}</h3>
+                    <p className="text-xs text-slate-400 mb-3 flex items-start gap-1">
+                      <MapPin className="w-3.5 h-3.5 text-rose-400 flex-shrink-0 mt-0.5" />
+                      <span>{selectedPlace.address}</span>
+                    </p>
+                    <div className="bg-slate-950 p-3.5 rounded-xl border border-slate-800/80 mb-4">
+                      <p className="text-xs text-slate-300 leading-relaxed">{selectedPlace.desc}</p>
+                    </div>
+                    <a
+                      href={`https://maps.google.com/?q=${encodeURIComponent(selectedPlace.name + " " + selectedPlace.address)}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="w-full flex items-center justify-center space-x-2 py-2.5 rounded-xl bg-rose-500 hover:bg-rose-600 text-white font-semibold text-xs transition shadow-lg shadow-rose-500/20"
+                    >
+                      <Navigation className="w-4 h-4" />
+                      <span>Como Chegar (Google Maps)</span>
+                    </a>
+                  </div>
+                ) : (
+                  <div className="h-full flex flex-col items-center justify-center text-center p-4">
+                    <MapPin className="w-10 h-10 text-slate-700 mb-2 animate-bounce" />
+                    <p className="text-xs text-slate-400 font-medium">Clique num marcador do mapa para ver detalhes e direções.</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'food' && (
+          <div className="space-y-6 animate-fadeIn">
+            <div>
+              <h2 className="text-2xl font-bold text-white">Guia Gastronómico & Dicas Locais</h2>
+              <p className="text-xs text-slate-400">Restaurantes selecionados para comer bem sem gastar muito e regras de ouro para a viagem.</p>
+            </div>
+
+            <div className="space-y-3">
+              <h3 className="text-sm font-bold text-rose-400 uppercase tracking-wider flex items-center gap-2">
+                <AlertCircle className="w-4 h-4" /> Dicas Rápidas de Sobrevivência
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {SURVIVAL_TIPS.map((tip, idx) => {
+                  const TipIcon = tip.icon;
+                  return (
+                    <div key={idx} className="bg-slate-900 border border-slate-800 p-4 rounded-2xl flex items-start space-x-3.5">
+                      <div className="p-2.5 rounded-xl bg-slate-800 text-rose-400 flex-shrink-0">
+                        <TipIcon className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <div className="flex items-center space-x-2 mb-1">
+                          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${tip.badgeBg}`}>
+                            {tip.category}
+                          </span>
+                        </div>
+                        <h4 className="font-bold text-sm text-white">{tip.title}</h4>
+                        <p className="text-xs text-slate-300 mt-1 leading-relaxed">{tip.desc}</p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="space-y-3 pt-4">
+              <h3 className="text-sm font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-2">
+                <Utensils className="w-4 h-4" /> Restaurantes Económicos Recomendados
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {RESTAURANTS_DATA.map((resto, idx) => (
+                  <div key={idx} className="bg-slate-900 border border-slate-800 p-5 rounded-2xl flex flex-col justify-between hover:border-slate-700 transition">
+                    <div>
+                      <div className="flex justify-between items-start mb-2">
+                        <h4 className="font-bold text-base text-white">{resto.name}</h4>
+                        <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                          {resto.price}
+                        </span>
+                      </div>
+                      <p className="text-xs text-slate-400 font-medium mb-3">{resto.type}</p>
+                      <div className="space-y-1.5 text-xs text-slate-300 bg-slate-950 p-3 rounded-xl border border-slate-800/80">
+                        <p><strong className="text-slate-400">Especialidade:</strong> {resto.specialty}</p>
+                        <p className="text-amber-300"><strong className="text-amber-400">Dica:</strong> {resto.tip}</p>
+                      </div>
+                    </div>
+                    <div className="mt-4 pt-3 border-t border-slate-800 text-xs text-slate-400 flex items-center justify-between">
+                      <span className="flex items-center gap-1">
+                        <MapPin className="w-3.5 h-3.5 text-slate-500" /> {resto.address}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'ai' && (
+          <div className="space-y-4 animate-fadeIn flex flex-col h-[calc(100vh-140px)] max-h-[700px]">
+            <div className="flex justify-between items-center">
+              <div>
+                <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                  <Bot className="w-6 h-6 text-purple-400" /> Toulouse AI Concierge
+                </h2>
+                <p className="text-xs text-slate-400">Assistente virtual em tempo real para dúvidas sobre a viagem e traduções.</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 overflow-x-auto pb-1">
+              <button
+                onClick={() => handleSendMessage("Onde comer um Cassoulet barato?")}
+                className="px-3 py-1.5 rounded-full bg-slate-900 border border-slate-800 hover:border-purple-500/50 text-slate-300 text-xs font-medium whitespace-nowrap transition flex items-center gap-1.5"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-purple-400" /> Onde comer Cassoulet barato?
+              </button>
+              <button
+                onClick={() => handleSendMessage("Como pedir uma garrafa de água em francês?")}
+                className="px-3 py-1.5 rounded-full bg-slate-900 border border-slate-800 hover:border-purple-500/50 text-slate-300 text-xs font-medium whitespace-nowrap transition flex items-center gap-1.5"
+              >
+                <Coffee className="w-3.5 h-3.5 text-emerald-400" /> Pedir água em francês?
+              </button>
+              <button
+                onClick={() => handleSendMessage("Qual o caminho para a paragem do autocarro do aeroporto?")}
+                className="px-3 py-1.5 rounded-full bg-slate-900 border border-slate-800 hover:border-purple-500/50 text-slate-300 text-xs font-medium whitespace-nowrap transition flex items-center gap-1.5"
+              >
+                <Bus className="w-3.5 h-3.5 text-amber-400" /> Autocarro do aeroporto?
+              </button>
+            </div>
+
+            <div className="flex-1 bg-slate-900 border border-slate-800 rounded-2xl p-4 overflow-y-auto space-y-3 flex flex-col">
+              {chatMessages.map((msg, idx) => (
+                <div
+                  key={idx}
+                  className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                >
+                  <div className={`max-w-[85%] md:max-w-[75%] p-3.5 rounded-2xl text-xs leading-relaxed ${
+                    msg.sender === 'user'
+                      ? 'bg-rose-500 text-white rounded-br-none'
+                      : 'bg-slate-800 text-slate-200 border border-slate-700/60 rounded-bl-none shadow'
+                  }`}>
+                    {msg.text}
+                  </div>
+                </div>
+              ))}
+              {isTyping && (
+                <div className="flex justify-start">
+                  <div className="bg-slate-800 border border-slate-700 p-3 rounded-2xl rounded-bl-none text-xs text-slate-400 flex items-center space-x-2">
+                    <span className="w-2 h-2 rounded-full bg-purple-400 animate-pulse" />
+                    <span>Toulouse AI está a pensar...</span>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <input
+                type="text"
+                value={inputMessage}
+                onChange={(e) => setInputMessage(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+                placeholder="Pergunta sobre a viagem ou tradução em francês..."
+                className="flex-1 bg-slate-900 border border-slate-800 text-white placeholder-slate-500 text-xs rounded-xl px-4 py-3 focus:outline-none focus:border-purple-500/80"
+              />
+              <button
+                onClick={() => handleSendMessage()}
+                className="p-3 bg-purple-600 hover:bg-purple-500 text-white rounded-xl transition shadow-lg shadow-purple-600/30"
+              >
+                <Send className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        )}
+      </main>
+
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-slate-950/95 backdrop-blur-md border-t border-slate-800 px-2 py-2 flex justify-around items-center z-50">
+        <button
+          onClick={() => setActiveTab('dashboard')}
+          className={`flex flex-col items-center py-1 px-2 rounded-xl transition ${
+            activeTab === 'dashboard' ? 'text-amber-400' : 'text-slate-500'
+          }`}
+        >
+          <Sparkles className="w-5 h-5" />
+          <span className="text-[10px] font-medium mt-1">Home</span>
+        </button>
+        <button
+          onClick={() => setActiveTab('itinerary')}
+          className={`flex flex-col items-center py-1 px-2 rounded-xl transition ${
+            activeTab === 'itinerary' ? 'text-rose-400' : 'text-slate-500'
+          }`}
+        >
+          <Calendar className="w-5 h-5" />
+          <span className="text-[10px] font-medium mt-1">4 Dias</span>
+        </button>
+        <button
+          onClick={() => setActiveTab('map')}
+          className={`flex flex-col items-center py-1 px-2 rounded-xl transition ${
+            activeTab === 'map' ? 'text-blue-400' : 'text-slate-500'
+          }`}
+        >
+          <MapPin className="w-5 h-5" />
+          <span className="text-[10px] font-medium mt-1">Mapa</span>
+        </button>
+        <button
+          onClick={() => setActiveTab('food')}
+          className={`flex flex-col items-center py-1 px-2 rounded-xl transition ${
+            activeTab === 'food' ? 'text-emerald-400' : 'text-slate-500'
+          }`}
+        >
+          <Utensils className="w-5 h-5" />
+          <span className="text-[10px] font-medium mt-1">Dicas</span>
+        </button>
+        <button
+          onClick={() => setActiveTab('ai')}
+          className={`flex flex-col items-center py-1 px-2 rounded-xl transition ${
+            activeTab === 'ai' ? 'text-purple-400' : 'text-slate-500'
+          }`}
+        >
+          <Bot className="w-5 h-5" />
+          <span className="text-[10px] font-medium mt-1">IA Guide</span>
+        </button>
+      </div>
+    </div>
+  );
+}
