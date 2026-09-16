@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia de Viagem Toulouse 2026</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-slate-800 min-h-screen flex flex-col font-sans selection:bg-rose-200 pb-20 md:pb-0">
+
+    <!-- Top Header -->
+    <header class="bg-gradient-to-r from-rose-600 via-rose-500 to-orange-500 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+            
+            <!-- Logo & Brand -->
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('dashboard')">
+                <div class="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center shadow-inner">
+                    <i data-lucide="compass" class="w-6 h-6 text-white animate-pulse"></i>
+                </div>
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <span class="font-extrabold text-lg tracking-tight">Toulouse Guide</span>
+                        <span class="bg-white/20 text-xs px-2 py-0.5 rounded-full font-semibold backdrop-blur-sm">2026</span>
+                    </div>
+                    <p class="text-xs text-rose-100 font-medium">01 a 04 de Outubro • Ville Rose</p>
+                </div>
+            </div>
+
+            <!-- Desktop Navigation Tabs -->
+            <nav class="hidden md:flex items-center space-x-1 bg-black/10 p-1.5 rounded-2xl border border-white/10 backdrop-blur-md">
+                <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 bg-white text-rose-600 shadow-md scale-105">
+                    <i data-lucide="sparkles" class="w-4 h-4"></i>
+                    <span>Resumo</span>
+                </button>
+                <button onclick="switchTab('itinerary')" id="nav-itinerary" class="nav-btn flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 text-white/90 hover:bg-white/15 hover:text-white">
+                    <i data-lucide="calendar" class="w-4 h-4"></i>
+                    <span>Itinerário</span>
+                </button>
+                <button onclick="switchTab('map')" id="nav-map" class="nav-btn flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 text-white/90 hover:bg-white/15 hover:text-white">
+                    <i data-lucide="map-pin" class="w-4 h-4"></i>
+                    <span>Mapa</span>
+                </button>
+                <button onclick="switchTab('ai')" id="nav-ai" class="nav-btn flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 text-white/90 hover:bg-white/15 hover:text-white">
+                    <i data-lucide="bot" class="w-4 h-4"></i>
+                    <span>AI Concierge</span>
+                </button>
+                <button onclick="switchTab('guide')" id="nav-guide" class="nav-btn flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 text-white/90 hover:bg-white/15 hover:text-white">
+                    <i data-lucide="info" class="w-4 h-4"></i>
+                    <span>Guia Local</span>
+                </button>
+                <button onclick="switchTab('repo')" id="nav-repo" class="nav-btn flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 text-white/90 hover:bg-white/15 hover:text-white">
+                    <i data-lucide="code" class="w-4 h-4"></i>
+                    <span>Código Repositório</span>
+                </button>
+            </nav>
+
+            <!-- Quick Info Badge -->
+            <div class="hidden lg:flex items-center space-x-2 bg-white/15 px-3 py-1.5 rounded-xl border border-white/20 text-xs text-white">
+                <i data-lucide="hotel" class="w-4 h-4 text-orange-200"></i>
+                <span>Mercure Capitole</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- ================= TAB 1: DASHBOARD ================= -->
+        <div id="tab-dashboard" class="tab-content active space-y-6">
+            
+            <!-- Hero Countdown Banner -->
+            <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-rose-600 via-rose-500 to-amber-500 text-white p-6 sm:p-8 shadow-xl">
+                <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+                <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                    <div>
+                        <div class="inline-flex items-center space-x-2 bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-3">
+                            <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
+                            <span>Contagem Decrescente da Viagem</span>
+                        </div>
+                        <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight">Toulouse, Carcassonne & Albi</h1>
+                        <p class="text-rose-100 text-sm sm:text-base mt-2 max-w-xl">
+                            Sua viagem de 4 dias no sudoeste francês. Tudo preparado para a chegada a 01 de Outubro de 2026.
+                        </p>
+                    </div>
+
+                    <!-- Countdown Cards -->
+                    <div class="grid grid-cols-4 gap-2 sm:gap-3 bg-black/20 p-3 sm:p-4 rounded-2xl border border-white/20 backdrop-blur-md text-center">
+                        <div class="bg-white/10 p-2 sm:p-3 rounded-xl min-w-[60px]">
+                            <span id="cd-days" class="block text-xl sm:text-2xl font-black">00</span>
+                            <span class="text-[10px] sm:text-xs text-rose-200 uppercase font-semibold">Dias</span>
+                        </div>
+                        <div class="bg-white/10 p-2 sm:p-3 rounded-xl min-w-[60px]">
+                            <span id="cd-hours" class="block text-xl sm:text-2xl font-black">00</span>
+                            <span class="text-[10px] sm:text-xs text-rose-200 uppercase font-semibold">Horas</span>
+                        </div>
+                        <div class="bg-white/10 p-2 sm:p-3 rounded-xl min-w-[60px]">
+                            <span id="cd-mins" class="block text-xl sm:text-2xl font-black">00</span>
+                            <span class="text-[10px] sm:text-xs text-rose-200 uppercase font-semibold">Min</span>
+                        </div>
+                        <div class="bg-white/10 p-2 sm:p-3 rounded-xl min-w-[60px]">
+                            <span id="cd-secs" class="block text-xl sm:text-2xl font-black">00</span>
+                            <span class="text-[10px] sm:text-xs text-rose-200 uppercase font-semibold">Seg</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="bg-white p-4 rounded-2xl border border-stone-200 shadow-sm flex items-center space-x-3">
+                    <div class="p-3 bg-rose-100 text-rose-600 rounded-xl">
+                        <i data-lucide="plane" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs text-stone-500 font-medium block">Voos Ryanair</span>
+                        <span class="text-sm font-bold text-slate-900">FR1798 / FR1799</span>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded-2xl border border-stone-200 shadow-sm flex items-center space-x-3">
+                    <div class="p-3 bg-orange-100 text-orange-600 rounded-xl">
+                        <i data-lucide="hotel" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs text-stone-500 font-medium block">Alojamento</span>
+                        <span class="text-sm font-bold text-slate-900">Mercure Capitole</span>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded-2xl border border-stone-200 shadow-sm flex items-center space-x-3">
+                    <div class="p-3 bg-sky-100 text-sky-600 rounded-xl">
+                        <i data-lucide="map-pin" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs text-stone-500 font-medium block">Encontro Excursões</span>
+                        <span class="text-sm font-bold text-slate-900">29 All. Jean Jaurès</span>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded-2xl border border-stone-200 shadow-sm flex items-center space-x-3">
+                    <div class="p-3 bg-emerald-100 text-emerald-600 rounded-xl">
+                        <i data-lucide="bus" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs text-stone-500 font-medium block">Transfer Aeroporto</span>
+                        <span class="text-sm font-bold text-slate-900">Navette (9,00 €)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Flights Cards -->
+            <div class="bg-white rounded-3xl p-6 border border-stone-200 shadow-sm space-y-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <i data-lucide="plane" class="w-5 h-5 text-rose-500"></i>
+                        <h2 class="text-lg font-extrabold text-slate-900">Detalhes dos Voos Ryanair</h2>
+                    </div>
+                    <span class="bg-rose-50 text-rose-600 text-xs font-bold px-3 py-1 rounded-full border border-rose-200">
+                        Confirmado
+                    </span>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-4">
+                    <!-- Outbound -->
+                    <div class="p-5 rounded-2xl bg-gradient-to-br from-stone-50 to-rose-50/30 border border-stone-200 relative">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-xs font-bold uppercase tracking-wider text-rose-600 bg-rose-100 px-2.5 py-0.5 rounded-md">
+                                Voo de Ida • 01/10/2026
+                            </span>
+                            <span class="text-xs font-mono font-bold text-stone-600">FR1798</span>
+                        </div>
+
+                        <div class="flex items-center justify-between my-2">
+                            <div>
+                                <span class="text-2xl font-black text-slate-900">17:00</span>
+                                <p class="text-xs font-semibold text-stone-600">LIS (Lisboa)</p>
+                            </div>
+
+                            <div class="flex-1 mx-4 flex flex-col items-center">
+                                <span class="text-[10px] text-stone-400 font-mono mb-1">1h 50m</span>
+                                <div class="w-full h-0.5 bg-rose-300 relative flex items-center justify-center">
+                                    <i data-lucide="plane" class="w-4 h-4 text-rose-500 absolute bg-white p-0.5 rounded-full"></i>
+                                </div>
+                            </div>
+
+                            <div class="text-right">
+                                <span class="text-2xl font-black text-slate-900">19:50</span>
+                                <p class="text-xs font-semibold text-stone-600">TLS (Toulouse)</p>
+                            </div>
+                        </div>
+
+                        <p class="text-xs text-stone-500 mt-2 flex items-center space-x-1">
+                            <i data-lucide="info" class="w-3.5 h-3.5 text-rose-500"></i>
+                            <span>Partida de Lisboa (LIS) no Voo FR1798 com chegada às 19:50 a Toulouse.</span>
+                        </p>
+                    </div>
+
+                    <!-- Inbound -->
+                    <div class="p-5 rounded-2xl bg-gradient-to-br from-stone-50 to-orange-50/30 border border-stone-200 relative">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-xs font-bold uppercase tracking-wider text-orange-600 bg-orange-100 px-2.5 py-0.5 rounded-md">
+                                Voo de Regresso • 04/10/2026
+                            </span>
+                            <span class="text-xs font-mono font-bold text-stone-600">FR1799</span>
+                        </div>
+
+                        <div class="flex items-center justify-between my-2">
+                            <div>
+                                <span class="text-2xl font-black text-slate-900">22:30</span>
+                                <p class="text-xs font-semibold text-stone-600">TLS (Toulouse)</p>
+                            </div>
+
+                            <div class="flex-1 mx-4 flex flex-col items-center">
+                                <span class="text-[10px] text-stone-400 font-mono mb-1">2h 05m</span>
+                                <div class="w-full h-0.5 bg-orange-300 relative flex items-center justify-center">
+                                    <i data-lucide="plane" class="w-4 h-4 text-orange-500 absolute bg-white p-0.5 rounded-full transform rotate-180"></i>
+                                </div>
+                            </div>
+
+                            <div class="text-right">
+                                <span class="text-2xl font-black text-slate-900">23:35</span>
+                                <p class="text-xs font-semibold text-stone-600">LIS (Lisboa)</p>
+                            </div>
+                        </div>
+
+                        <p class="text-xs text-stone-500 mt-2 flex items-center space-x-1">
+                            <i data-lucide="info" class="w-3.5 h-3.5 text-orange-500"></i>
+                            <span>Partida de Toulouse (TLS - Hall D) às 22:30 com chegada a Lisboa às 23:35.</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hotel & Meeting Point Split -->
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Hotel Mercure Card -->
+                <div class="bg-white rounded-3xl p-6 border border-stone-200 shadow-sm flex flex-col justify-between space-y-4">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="bg-purple-100 text-purple-700 text-xs font-bold px-2.5 py-1 rounded-lg flex items-center space-x-1">
+                                <i data-lucide="hotel" class="w-3.5 h-3.5 mr-1"></i>
+                                Hotel Principal
+                            </span>
+                            <span class="text-xs text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded">
+                                Pequeno-almoço Incluído (APA)
+                            </span>
+                        </div>
+
+                        <h3 class="text-xl font-extrabold text-slate-900">Hotel Mercure Toulouse Centre Wilson Capitole</h3>
+                        <p class="text-xs text-stone-600 flex items-center mt-1">
+                            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-rose-500 mr-1 flex-shrink-0"></i>
+                            7 Rue Labeda, 31000 Toulouse, França
+                        </p>
+
+                        <div class="mt-4 space-y-2">
+                            <div class="flex items-center space-x-2 text-xs text-slate-700">
+                                <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500 flex-shrink-0"></i>
+                                <span>Localização central ultra-conveniente</span>
+                            </div>
+                            <div class="flex items-center space-x-2 text-xs text-slate-700">
+                                <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500 flex-shrink-0"></i>
+                                <span>Pequeno-almoço buffet incluído</span>
+                            </div>
+                            <div class="flex items-center space-x-2 text-xs text-slate-700">
+                                <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500 flex-shrink-0"></i>
+                                <span>A 3min da Place du Capitole</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="https://www.google.com/maps/search/?api=1&query=Hotel+Mercure+Toulouse+Centre+Wilson+Capitole+7+Rue+Labeda+31000+Toulouse" target="_blank" rel="noreferrer" class="w-full bg-stone-100 hover:bg-stone-200 text-slate-800 text-xs font-bold py-2.5 rounded-xl flex items-center justify-center space-x-2 transition-colors">
+                        <i data-lucide="navigation" class="w-4 h-4 text-rose-500"></i>
+                        <span>Abrir no Google Maps</span>
+                    </a>
+                </div>
+
+                <!-- Main Meeting Point Card -->
+                <div class="bg-white rounded-3xl p-6 border border-stone-200 shadow-sm flex flex-col justify-between space-y-4">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="bg-rose-100 text-rose-700 text-xs font-bold px-2.5 py-1 rounded-lg flex items-center space-x-1">
+                                <i data-lucide="users" class="w-3.5 h-3.5 mr-1"></i>
+                                Ponto de Partida
+                            </span>
+                            <span class="text-xs text-rose-600 font-bold bg-rose-50 px-2 py-0.5 rounded">
+                                Comparência às 09:15
+                            </span>
+                        </div>
+
+                        <h3 class="text-xl font-extrabold text-slate-900">Ponto de Encontro Principal das Excursões</h3>
+                        <p class="text-xs text-stone-600 flex items-center mt-1">
+                            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-rose-500 mr-1 flex-shrink-0"></i>
+                            29 Allées Jean Jaurès, 31000 Toulouse
+                        </p>
+
+                        <div class="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-800 space-y-1">
+                            <div class="font-bold flex items-center">
+                                <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-600 mr-1.5"></i>
+                                Atenção para as Excursões de Carcassonne e Albi:
+                            </div>
+                            <p>Ponto de partida dos autocarros para Carcassonne (02/10) e Albi/Cordes (03/10). Chegar às 09:15!</p>
+                        </div>
+                    </div>
+
+                    <a href="https://www.google.com/maps/search/?api=1&query=29+All%C3%A9es+Jean+Jaur%C3%A8s+Toulouse" target="_blank" rel="noreferrer" class="w-full bg-rose-500 hover:bg-rose-600 text-white text-xs font-bold py-2.5 rounded-xl flex items-center justify-center space-x-2 transition-colors shadow-sm">
+                        <i data-lucide="navigation" class="w-4 h-4"></i>
+                        <span>Ver Ponto de Encontro</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Quick Action Cards -->
+            <div class="grid sm:grid-cols-3 gap-4">
+                <button onclick="switchTab('itinerary')" class="bg-white p-5 rounded-2xl border border-stone-200 hover:border-rose-300 text-left transition-all hover:shadow-md group">
+                    <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                        <i data-lucide="calendar" class="w-5 h-5"></i>
+                    </div>
+                    <h4 class="font-bold text-slate-900 text-sm">Ver Itinerário Completo</h4>
+                    <p class="text-xs text-stone-500 mt-1">Timeline hora-a-hora do Dia 1 ao Dia 4.</p>
+                </button>
+
+                <button onclick="switchTab('map')" class="bg-white p-5 rounded-2xl border border-stone-200 hover:border-sky-300 text-left transition-all hover:shadow-md group">
+                    <div class="w-10 h-10 rounded-xl bg-sky-100 text-sky-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                        <i data-lucide="map-pin" class="w-5 h-5"></i>
+                    </div>
+                    <h4 class="font-bold text-slate-900 text-sm">Mapa Interativo</h4>
+                    <p class="text-xs text-stone-500 mt-1">Marcadores coloridos de atrações e restaurantes.</p>
+                </button>
+
+                <button onclick="switchTab('ai')" class="bg-white p-5 rounded-2xl border border-stone-200 hover:border-purple-300 text-left transition-all hover:shadow-md group">
+                    <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                        <i data-lucide="bot" class="w-5 h-5"></i>
+                    </div>
+                    <h4 class="font-bold text-slate-900 text-sm">Toulouse AI Concierge</h4>
+                    <p class="text-xs text-stone-500 mt-1">Tire dúvidas em tempo real com o assistente inteligente.</p>
+                </button>
+            </div>
+
+        </div>
+
+        <!-- ================= TAB 2: ITINERARY ================= -->
+        <div id="tab-itinerary" class="tab-content space-y-6">
+            <div class="bg-white rounded-3xl p-6 border border-stone-200 shadow-sm space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                        <h2 class="text-2xl font-black text-slate-900">Itinerário Detalhado da Viagem</h2>
+                        <p class="text-xs text-stone-500">Explore o programa completo dia-a-dia de 01 a 04 de Outubro de 2026</p>
+                    </div>
+                    <div class="flex items-center space-x-2 text-xs bg-rose-50 text-rose-700 px-3 py-1.5 rounded-xl font-bold border border-rose-200">
+                        <i data-lucide="sparkles" class="w-4 h-4 text-rose-500"></i>
+                        <span>4 Dias Planeados</span>
+                    </div>
+                </div>
+
+                <!-- Day Tabs -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2">
+                    <button onclick="selectDay(1)" id="day-btn-1" class="day-btn p-3 rounded-2xl text-left transition-all border bg-rose-500 text-white border-rose-500 shadow-md scale-[1.02]">
+                        <span class="block text-[10px] font-bold uppercase tracking-wider opacity-80">Dia 1</span>
+                        <span class="block text-sm font-extrabold truncate">01 Out (Qui)</span>
+                    </button>
+                    <button onclick="selectDay(2)" id="day-btn-2" class="day-btn p-3 rounded-2xl text-left transition-all border bg-stone-50 text-slate-700 border-stone-200 hover:bg-stone-100">
+                        <span class="block text-[10px] font-bold uppercase tracking-wider opacity-80">Dia 2</span>
+                        <span class="block text-sm font-extrabold truncate">02 Out (Sexta)</span>
+                    </button>
+                    <button onclick="selectDay(3)" id="day-btn-3" class="day-btn p-3 rounded-2xl text-left transition-all border bg-stone-50 text-slate-700 border-stone-200 hover:bg-stone-100">
+                        <span class="block text-[10px] font-bold uppercase tracking-wider opacity-80">Dia 3</span>
+                        <span class="block text-sm font-extrabold truncate">03 Out (Sáb)</span>
+                    </button>
+                    <button onclick="selectDay(4)" id="day-btn-4" class="day-btn p-3 rounded-2xl text-left transition-all border bg-stone-50 text-slate-700 border-stone-200 hover:bg-stone-100">
+                        <span class="block text-[10px] font-bold uppercase tracking-wider opacity-80">Dia 4</span>
+                        <span class="block text-sm font-extrabold truncate">04 Out (Dom)</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Selected Day Content Holder -->
+            <div id="itinerary-content" class="space-y-6"></div>
+        </div>
+
+        <!-- ================= TAB 3: MAP ================= -->
+        <div id="tab-map" class="tab-content space-y-6">
+            <div class="bg-white rounded-3xl p-6 border border-stone-200 shadow-sm space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                        <h2 class="text-2xl font-black text-slate-900">Mapa Interativo de Toulouse & Região</h2>
+                        <p class="text-xs text-stone-500">Explore hotéis, atrações, pontos de encontro, restaurantes e transportes.</p>
+                    </div>
+                </div>
+
+                <!-- Category Pills -->
+                <div class="flex flex-wrap gap-2 pt-1">
+                    <button onclick="filterMap('all')" id="cat-btn-all" class="map-cat-btn px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all bg-slate-800 text-white shadow-md scale-105">Todos os Locais</button>
+                    <button onclick="filterMap('hotel')" id="cat-btn-hotel" class="map-cat-btn px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all bg-stone-100 text-slate-700 hover:bg-stone-200">Hotéis & Encontros</button>
+                    <button onclick="filterMap('monument')" id="cat-btn-monument" class="map-cat-btn px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all bg-stone-100 text-slate-700 hover:bg-stone-200">Monumentos</button>
+                    <button onclick="filterMap('dining')" id="cat-btn-dining" class="map-cat-btn px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all bg-stone-100 text-slate-700 hover:bg-stone-200">Restaurantes Económicos</button>
+                    <button onclick="filterMap('transport')" id="cat-btn-transport" class="map-cat-btn px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all bg-stone-100 text-slate-700 hover:bg-stone-200">Transportes</button>
+                </div>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-6">
+                <!-- Map Grid Simulation -->
+                <div class="lg:col-span-2 bg-slate-900 rounded-3xl p-4 sm:p-6 text-white border border-slate-800 shadow-xl relative min-h-[420px] flex flex-col justify-between overflow-hidden">
+                    <div class="absolute inset-0 opacity-20 pointer-events-none">
+                        <svg class="w-full h-full" viewBox="0 0 500 400" preserveAspectRatio="none">
+                            <path d="M 120,0 C 180,120 150,250 220,400" fill="none" stroke="#38bdf8" stroke-width="28" opacity="0.6"/>
+                            <path d="M 220,180 C 320,160 400,220 500,240" fill="none" stroke="#38bdf8" stroke-width="12" opacity="0.4"/>
+                        </svg>
+                    </div>
+
+                    <div class="relative z-10 flex justify-between items-center">
+                        <span class="bg-slate-800/90 text-stone-300 text-xs font-bold px-3 py-1 rounded-xl border border-slate-700 backdrop-blur-md">
+                            📍 Toulouse & Occitanie (Mapeamento Interativo)
+                        </span>
+                        <span class="text-[10px] text-stone-400 bg-black/40 px-2 py-1 rounded font-mono">Clique em qualquer marcador</span>
+                    </div>
+
+                    <div id="map-pins-container" class="relative z-10 my-auto py-8 grid grid-cols-2 sm:grid-cols-3 gap-3"></div>
+
+                    <div class="relative z-10 text-[11px] text-slate-400 flex items-center justify-between border-t border-slate-800 pt-3">
+                        <span>🔴 Hotel/Partida • 🔵 Monumentos • 🟢 Restaurantes • 🟡 Transportes</span>
+                        <span class="text-rose-400 font-bold">12 Locais Destacados</span>
+                    </div>
+                </div>
+
+                <!-- Pin Detail Sidebar -->
+                <div id="map-pin-detail" class="bg-white p-6 rounded-3xl border border-stone-200 shadow-sm flex flex-col justify-between space-y-4"></div>
+            </div>
+        </div>
+
+        <!-- ================= TAB 4: AI ASSISTANT ================= -->
+        <div id="tab-ai" class="tab-content space-y-6">
+            <div class="bg-white rounded-3xl p-6 border border-stone-200 shadow-sm">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-rose-500 to-purple-600 flex items-center justify-center text-white shadow-md">
+                        <i data-lucide="bot" class="w-7 h-7"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-black text-slate-900">Toulouse AI Concierge</h2>
+                        <p class="text-xs text-stone-500">O seu assistente de viagem local ativo 24/7 alimentado por IA.</p>
+                    </div>
+                </div>
+
+                <div class="mt-4 pt-3 border-t border-stone-100 space-y-2">
+                    <span class="text-[11px] font-bold text-stone-400 uppercase tracking-wider block">
+                        Perguntas Frequentes (Clique para enviar):
+                    </span>
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="sendPresetMessage('Onde apanhar a Navette do aeroporto e quanto custa?')" class="text-xs bg-rose-50 hover:bg-rose-100 text-rose-700 px-3 py-1.5 rounded-xl border border-rose-200 transition-colors font-medium">💡 Onde apanhar a Navette do aeroporto e quanto custa?</button>
+                        <button onclick="sendPresetMessage('Onde comer um Cassoulet bom e barato?')" class="text-xs bg-rose-50 hover:bg-rose-100 text-rose-700 px-3 py-1.5 rounded-xl border border-rose-200 transition-colors font-medium">💡 Onde comer um Cassoulet bom e barato?</button>
+                        <button onclick="sendPresetMessage('Como pedir água gratuita em francês?')" class="text-xs bg-rose-50 hover:bg-rose-100 text-rose-700 px-3 py-1.5 rounded-xl border border-rose-200 transition-colors font-medium">💡 Como pedir água gratuita em francês?</button>
+                        <button onclick="sendPresetMessage('Qual o horário do autocarro para Carcassonne?')" class="text-xs bg-rose-50 hover:bg-rose-100 text-rose-700 px-3 py-1.5 rounded-xl border border-rose-200 transition-colors font-medium">💡 Qual o horário do autocarro para Carcassonne?</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Container -->
+            <div class="bg-white rounded-3xl border border-stone-200 shadow-sm flex flex-col h-[500px] overflow-hidden">
+                <div id="chat-messages" class="flex-1 p-4 sm:p-6 overflow-y-auto space-y-4 bg-stone-50/50"></div>
+
+                <div class="p-4 bg-white border-t border-stone-200 flex items-center space-x-2">
+                    <input type="text" id="chat-input" onkeydown="if(event.key === 'Enter') handleUserSend()" placeholder="Escreva a sua dúvida sobre Toulouse, transportes ou restaurantes..." class="flex-1 bg-stone-100 text-slate-900 text-xs sm:text-sm px-4 py-3 rounded-xl outline-none focus:ring-2 focus:ring-rose-500 transition-all"/>
+                    <button onclick="handleUserSend()" class="bg-rose-500 hover:bg-rose-600 text-white px-5 py-3 rounded-xl font-bold text-xs sm:text-sm flex items-center space-x-1 transition-colors">
+                        <span>Enviar</span>
+                        <i data-lucide="send" class="w-4 h-4 ml-1"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= TAB 5: LOCAL GUIDE ================= -->
+        <div id="tab-guide" class="tab-content space-y-6">
+            <div class="bg-white rounded-3xl p-6 border border-stone-200 shadow-sm">
+                <h2 class="text-2xl font-black text-slate-900">Guia Local & Dicas Essenciais</h2>
+                <p class="text-xs text-stone-500">Comparativo de transportes, frases úteis em francês e recomendações gastronómicas económicas.</p>
+            </div>
+
+            <!-- Transports -->
+            <div class="bg-white rounded-3xl p-6 border border-stone-200 shadow-sm space-y-4">
+                <div class="flex items-center space-x-2">
+                    <i data-lucide="bus" class="w-5 h-5 text-rose-500"></i>
+                    <h3 class="text-lg font-extrabold text-slate-900">Tabela de Transportes (Aeroporto TLS ↔ Centro)</h3>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div class="p-5 rounded-2xl border transition-all flex flex-col justify-between bg-rose-50/60 border-rose-300 ring-2 ring-rose-500/20">
+                        <div>
+                            <span class="bg-rose-500 text-white text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full mb-2 inline-block">Recomendado</span>
+                            <h4 class="font-extrabold text-sm text-slate-900">Navette Expresso (Recomendado)</h4>
+                            <p class="text-xl font-black text-rose-600 my-1">9,00 € / viagem</p>
+                            <div class="text-xs text-stone-600 space-y-1 my-3">
+                                <p>⏱️ Duração: <strong class="text-slate-800">20 - 25 min</strong></p>
+                                <p>🚌 Frequência: <strong class="text-slate-800">Cada 15 minutos</strong></p>
+                            </div>
+                            <p class="text-xs text-stone-500 leading-relaxed">Liga o Aeroporto TLS diretamente à paragem Jean Jaurès (a 4 min do hotel). Compra fácil na máquina com cartão.</p>
+                        </div>
+                    </div>
+
+                    <div class="p-5 rounded-2xl border transition-all flex flex-col justify-between bg-stone-50 border-stone-200">
+                        <div>
+                            <h4 class="font-extrabold text-sm text-slate-900">Uber / Táxi</h4>
+                            <p class="text-xl font-black text-rose-600 my-1">25,00 € - 35,00 €</p>
+                            <div class="text-xs text-stone-600 space-y-1 my-3">
+                                <p>⏱️ Duração: <strong class="text-slate-800">15 - 25 min</strong></p>
+                                <p>🚌 Frequência: <strong class="text-slate-800">Sob reserva</strong></p>
+                            </div>
+                            <p class="text-xs text-stone-500 leading-relaxed">Ideal se viajar com malas pesadas ou em grupo de 3-4 pessoas partilhando o valor.</p>
+                        </div>
+                    </div>
+
+                    <div class="p-5 rounded-2xl border transition-all flex flex-col justify-between bg-stone-50 border-stone-200">
+                        <div>
+                            <h4 class="font-extrabold text-sm text-slate-900">Metro de Toulouse (Tisséo)</h4>
+                            <p class="text-xl font-black text-rose-600 my-1">1,80 € / viagem</p>
+                            <div class="text-xs text-stone-600 space-y-1 my-3">
+                                <p>⏱️ Duração: <strong class="text-slate-800">Rede interna</strong></p>
+                                <p>🚌 Frequência: <strong class="text-slate-800">Cada 3-5 minutos</strong></p>
+                            </div>
+                            <p class="text-xs text-stone-500 leading-relaxed">Linhas A e B cruzam na estação Jean Jaurès. Muito útil dentro do centro histórico.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- French tips -->
+            <div class="bg-white rounded-3xl p-6 border border-stone-200 shadow-sm space-y-4">
+                <div class="flex items-center space-x-2">
+                    <i data-lucide="sparkles" class="w-5 h-5 text-amber-500"></i>
+                    <h3 class="text-lg font-extrabold text-slate-900">Dicas Culturais & Expressões Úteis em Francês</h3>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div class="p-5 bg-stone-50 rounded-2xl border border-stone-200 space-y-2">
+                        <h4 class="font-bold text-sm text-slate-900">Pedir água sem pagar</h4>
+                        <p class="text-sm font-black text-rose-600">"Une carafe d'eau, s'il vous plaît"</p>
+                        <p class="text-[11px] font-mono text-stone-500">Pronúncia: [Yn ka-raf do, sil vu ple]</p>
+                        <p class="text-xs text-stone-600 pt-2 border-t border-stone-200">Em França, por lei, a água da torneira filtrada ("carafe d'eau") é 100% gratuita nos restaurantes e perfeitamente potável!</p>
+                    </div>
+
+                    <div class="p-5 bg-stone-50 rounded-2xl border border-stone-200 space-y-2">
+                        <h4 class="font-bold text-sm text-slate-900">Cumprimentos fundamentais</h4>
+                        <p class="text-sm font-black text-rose-600">"Bonjour" / "Merci, au revoir"</p>
+                        <p class="text-[11px] font-mono text-stone-500">Pronúncia: [Bon-jur] / [Mer-si, o re-vuar]</p>
+                        <p class="text-xs text-stone-600 pt-2 border-t border-stone-200">Diga sempre "Bonjour" ao entrar em lojas, bistros ou ao falar com motoristas. É um sinal essencial de cortesia em França.</p>
+                    </div>
+
+                    <div class="p-5 bg-stone-50 rounded-2xl border border-stone-200 space-y-2">
+                        <h4 class="font-bold text-sm text-slate-900">Gorjeta em França</h4>
+                        <p class="text-sm font-black text-rose-600">"Le service est compris"</p>
+                        <p class="text-[11px] font-mono text-stone-500">Pronúncia: [Lə ser-vis e com-pri]</p>
+                        <p class="text-xs text-stone-600 pt-2 border-t border-stone-200">O serviço já está incluído na conta. Deixar 1€ ou 2€ de troco na mesa é um gesto apreciado, mas não obrigatório.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alerts -->
+            <div class="bg-amber-50 border border-amber-200 rounded-3xl p-6 text-amber-900 space-y-3">
+                <div class="flex items-center space-x-2 text-amber-800">
+                    <i data-lucide="alert-triangle" class="w-5 h-5 text-amber-600"></i>
+                    <h3 class="text-base font-extrabold">Alertas Importantes de Viagem</h3>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div class="bg-white/80 p-4 rounded-2xl border border-amber-200 text-xs space-y-1">
+                        <strong class="text-amber-950 font-bold block">Calçado Obrigatoriamente Confortável</strong>
+                        <p class="text-amber-900 leading-relaxed">As vilas de Carcassonne e Cordes-sur-Ciel têm declives íngremes e ruas em paralelepípedos centenários. Evite saltos altos ou calçado com sola fina e lisa.</p>
+                    </div>
+                    <div class="bg-white/80 p-4 rounded-2xl border border-amber-200 text-xs space-y-1">
+                        <strong class="text-amber-950 font-bold block">Pontualidade nas Excursões (09:15)</strong>
+                        <p class="text-amber-900 leading-relaxed">Os autocarros das excursões para Carcassonne e Albi partem pontualmente às 09:30 do ponto 29 Allées Jean Jaurès. Esteja lá impreterivelmente às 09:15!</p>
+                    </div>
+                    <div class="bg-white/80 p-4 rounded-2xl border border-amber-200 text-xs space-y-1">
+                        <strong class="text-amber-950 font-bold block">Horários das Refeições Francesas</strong>
+                        <p class="text-amber-900 leading-relaxed">O almoço em França é servido rigorosamente entre as 12:00 e as 14:00. Após as 14:00, muitas cozinhas fecham até ao jantar (19:30).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= TAB 6: REPO CODE VIEWER ================= -->
+        <div id="tab-repo" class="tab-content space-y-6">
+            <div class="bg-white rounded-3xl p-6 border border-stone-200 shadow-sm">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-2xl font-black text-slate-900">Estrutura de Ficheiros do Repositório GitHub</h2>
+                        <p class="text-xs text-stone-500">Navegue e copie os ficheiros da arquitetura oficial Expo / React Native</p>
+                    </div>
+                    <div class="flex items-center space-x-2 text-xs font-mono bg-slate-900 text-white px-3 py-1.5 rounded-xl">
+                        <i data-lucide="code" class="w-4 h-4 text-rose-400"></i>
+                        <span>toulouse-travel-app/</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-6">
+                <!-- File Selector Sidebar -->
+                <div class="bg-white p-4 rounded-3xl border border-stone-200 shadow-sm space-y-2">
+                    <span class="text-[11px] font-bold text-stone-400 uppercase tracking-wider block px-2 mb-2">Ficheiros do Projeto:</span>
+                    <div id="repo-files-list" class="space-y-1"></div>
+                </div>
+
+                <!-- Code Viewer Container -->
+                <div class="lg:col-span-2 bg-slate-950 rounded-3xl border border-slate-800 shadow-xl overflow-hidden flex flex-col justify-between min-h-[400px]">
+                    <div class="bg-slate-900 px-6 py-3 border-b border-slate-800 flex items-center justify-between">
+                        <div class="flex items-center space-x-2">
+                            <i data-lucide="file-code" class="w-4 h-4 text-rose-400"></i>
+                            <span id="repo-file-path" class="text-xs font-mono font-bold text-slate-200"></span>
+                        </div>
+                        <button onclick="copyRepoCode()" class="flex items-center space-x-1 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-3 py-1.5 rounded-lg border border-slate-700 transition-colors">
+                            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                            <span id="copy-btn-text">Copiar Código</span>
+                        </button>
+                    </div>
+
+                    <div class="p-6 overflow-x-auto text-xs font-mono text-emerald-400 leading-relaxed flex-1">
+                        <pre id="repo-file-code"></pre>
+                    </div>
+
+                    <div class="bg-slate-900/60 px-6 py-2 border-t border-slate-800 text-[10px] text-slate-500 flex justify-between">
+                        <span id="repo-file-lang">Linguagem: YAML</span>
+                        <span>Pronto para GitHub CI/CD & Expo Web</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Mobile Bottom Navigation Bar -->
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-stone-200 px-2 py-2 z-50 flex justify-around items-center shadow-lg">
+        <button onclick="switchTab('dashboard')" id="mobile-nav-dashboard" class="mobile-nav-btn flex flex-col items-center py-1 px-2 rounded-xl text-rose-600 font-bold scale-110">
+            <i data-lucide="sparkles" class="w-5 h-5"></i>
+            <span class="text-[10px] mt-0.5">Resumo</span>
+        </button>
+        <button onclick="switchTab('itinerary')" id="mobile-nav-itinerary" class="mobile-nav-btn flex flex-col items-center py-1 px-2 rounded-xl text-stone-400">
+            <i data-lucide="calendar" class="w-5 h-5"></i>
+            <span class="text-[10px] mt-0.5">Agenda</span>
+        </button>
+        <button onclick="switchTab('map')" id="mobile-nav-map" class="mobile-nav-btn flex flex-col items-center py-1 px-2 rounded-xl text-stone-400">
+            <i data-lucide="map-pin" class="w-5 h-5"></i>
+            <span class="text-[10px] mt-0.5">Mapa</span>
+        </button>
+        <button onclick="switchTab('ai')" id="mobile-nav-ai" class="mobile-nav-btn flex flex-col items-center py-1 px-2 rounded-xl text-stone-400">
+            <i data-lucide="bot" class="w-5 h-5"></i>
+            <span class="text-[10px] mt-0.5">IA Concierge</span>
+        </button>
+        <button onclick="switchTab('guide')" id="mobile-nav-guide" class="mobile-nav-btn flex flex-col items-center py-1 px-2 rounded-xl text-stone-400">
+            <i data-lucide="info" class="w-5 h-5"></i>
+            <span class="text-[10px] mt-0.5">Guia</span>
+        </button>
+        <button onclick="switchTab('repo')" id="mobile-nav-repo" class="mobile-nav-btn flex flex-col items-center py-1 px-2 rounded-xl text-stone-400">
+            <i data-lucide="code" class="w-5 h-5"></i>
+            <span class="text-[10px] mt-0.5">Código</span>
+        </button>
+    </nav>
+
+    <!-- JavaScript Data & Logic -->
+    <script>
+        // Data Structures
+        const ITINERARY_DAYS = [
+            {
+                day: 1,
+                date: 'Quinta-feira, 01 de Outubro de 2026',
+                title: 'Chegada à "Ville Rose" & Boas-Vindas',
+                tagline: 'Chegada, Transfer, Check-in no Hotel e Jantar na Place du Capitole',
+                weather: '19°C - Pôr do sol acolhedor',
+                events: [
+                    { time: '17:00 - 19:50', title: 'Voo LIS → TLS (FR1798)', category: 'flight', location: 'Aeroporto Humberto Delgado (LIS) → Aeroporto Toulouse-Blagnac (TLS)', description: 'Voo Ryanair de Lisboa para Toulouse. Duração: 1h50m.', tip: 'Mantenha os bilhetes de embarque e documentos na bolsa de mão.' },
+                    { time: '20:15 - 20:45', title: 'Transfer Navette Expresso Aeroporto', category: 'transport', location: 'Paragem de autocarros do Aeroporto TLS → Paragem Jean Jaurès', description: 'Apanhar o autocarro "Navette Aéroport" à saída do terminal.', tip: 'Bilhete 9,00 € por pessoa (comprável na máquina ou diretamente no autocarro).' },
+                    { time: '20:50 - 21:15', title: 'Check-in no Hotel Mercure Capitole', category: 'hotel', location: '7 Rue Labeda, 31000 Toulouse', description: 'Caminhada rápida da paragem Jean Jaurès até ao hotel para check-in e largar as bagagens.', tip: 'Confirmar horário do pequeno-almoço para a manhã seguinte.' },
+                    { time: '21:30 - 23:00', title: 'Jantar Rápido & Passeio Noturno', category: 'dining', location: 'Place du Capitole', description: 'Primeiro contacto com a famosa praça em tijolo rosa iluminada e jantar descontraído num bistro da praça.', tip: 'Aproveite a atmosfera noturna e tire as primeiras fotografias dos edifícios iluminados.' }
+                ]
+            },
+            {
+                day: 2,
+                date: 'Sexta-feira, 02 de Outubro de 2026',
+                title: 'Excursão à Cité de Carcassonne',
+                tagline: 'Viagem Medieval no tempo à maior fortaleza da Europa',
+                weather: '21°C - Sol com nuvens passageiras',
+                events: [
+                    { time: '09:15', title: 'Ponto de Encontro - Autocarro', category: 'meeting', location: '29 Allées Jean Jaurès, Toulouse', description: 'Apresentação do grupo no ponto de partida da excursão.', tip: 'Chegar com 15 minutos de antecedência. Leve água e calçado muito confortável.' },
+                    { time: '09:30 - 10:45', title: 'Viagem de Autocarro para Carcassonne', category: 'transport', location: 'Toulouse → Cité de Carcassonne', description: 'Trajeto de cerca de 75 minutos pelas paisagens da região Occitanie.', tip: 'Aproveite para apreciar a paisagem do Canal du Midi ao longo da estrada.' },
+                    { time: '10:45 - 14:30', title: 'Tempo Livre na Cité de Carcassonne & Château Comtal', category: 'excursion', location: 'Cité Medieval de Carcassonne', description: 'Exploração das muralhas históricas, ruas medievais, Basílica de Saint-Nazaire e visita ao Château Comtal.', tip: '3h45m de tempo livre total incluindo o almoço.' },
+                    { time: '12:30 - 13:45', title: 'Almoço Tradicional: Cassoulet de Carcassonne', category: 'dining', location: 'Restaurante La Trivalle (Carcassonne)', description: 'Provar o autêntico Cassoulet carregado de feijão branco, confit de pato e linguiça artesanal.', tip: 'Menu económico tradicional muito bem servido.' },
+                    { time: '14:30 - 15:45', title: 'Regresso de Autocarro a Toulouse', category: 'transport', location: 'Carcassonne → Toulouse', description: 'Viagem de regresso (75 min) até ao centro de Toulouse.', tip: 'Ponto de desembarque em Jean Jaurès.' },
+                    { time: '16:30 - 18:30', title: 'Pôr do Sol no Rio Garonne & Pont Neuf', category: 'sightseeing', location: 'Quai de la Daurade / Pont Neuf', description: 'Passeio relaxante pelas margens do Garonne com vista magnífica para a Pont Neuf sob a luz alaranjada da tarde.', tip: 'Ótimo local para sentar nos degraus de pedra com os locais.' },
+                    { time: '20:00 - 22:00', title: 'Jantar no Le Breughel', category: 'dining', location: '30 Rue de la Chaîne, Toulouse', description: 'Bistro acolhedor com menus económicos e pratos do sudoeste francês.', tip: 'Peça "Une carafe d\'eau, s\'il vous plaît" para água de jarra gratuita.' }
+                ]
+            },
+            {
+                day: 3,
+                date: 'Sábado, 03 de Outubro de 2026',
+                title: 'Excursão Dupla: Albi & Cordes-sur-Ciel',
+                tagline: 'A magnífica Catedral vermelha e a pitoresca vila nas nuvens',
+                weather: '20°C - Céu limpo e sol radiante',
+                events: [
+                    { time: '09:15', title: 'Ponto de Encontro - Autocarro', category: 'meeting', location: '29 Allées Jean Jaurès, Toulouse', description: 'Apresentação do grupo para embarque rumo a Albi.', tip: 'Leve protetor solar, óculos de sol e calçado antiderrapante.' },
+                    { time: '09:30 - 10:30', title: 'Autocarro Toulouse → Albi', category: 'transport', location: 'Toulouse → Albi (1h de viagem)', description: 'Trajeto cénico até à cidade episcopal de Albi, Património Mundial da UNESCO.', tip: 'A cidade de Albi é famosa pela sua arquitetura única em tijolo vermelho.' },
+                    { time: '10:30 - 14:30', title: 'Tempo Livre em Albi (4 Horas)', category: 'excursion', location: 'Centro Histórico de Albi', description: 'Visita à imponente Cathédrale Sainte-Cécile e ao Palais de la Berbie (Museu Toulouse-Lautrec).', tip: 'Entrada na nave principal da Catedral é fantástica e gratuita.' },
+                    { time: '12:30 - 13:30', title: 'Almoço Económico em Albi', category: 'dining', location: 'Crêperie du Garric (Albi)', description: 'Galettes de trigo sarraceno recheadas e crepes doces tradicionais a preços muito acessíveis.', tip: 'Combinação perfeita de crepe salgado + cidra de maçã.' },
+                    { time: '14:30 - 15:00', title: 'Autocarro Albi → Cordes-sur-Ciel', category: 'transport', location: 'Albi → Cordes-sur-Ciel (30 min)', description: 'Breve viagem de subida para a famosa vila alcantilada de Cordes-sur-Ciel.', tip: 'Uma das vilas medievais mais bonitas de França.' },
+                    { time: '15:00 - 17:30', title: 'Tempo Livre em Cordes-sur-Ciel (2.5 Horas)', category: 'excursion', location: 'Vila Alta de Cordes-sur-Ciel', description: 'Subida pelas ruas de paralelepípedos ladeadas por ateliers de artesãos e fachadas góticas até ao topo.', tip: 'Atenção às subidas íngremes e ruas empedradas.' },
+                    { time: '17:30 - 18:30', title: 'Regresso a Toulouse', category: 'transport', location: 'Cordes-sur-Ciel → Toulouse (1h de viagem)', description: 'Viagem de regresso ao ponto de partida em Jean Jaurès.', tip: 'Chegada estimada às 18:30.' },
+                    { time: '20:00', title: 'Jantar na Place Saint-Georges', category: 'dining', location: 'Place Saint-Georges, Toulouse', description: 'Praça animada cheia de esplanadas e bom ambiente para terminar o dia.', tip: 'Ótima seleção de tapas e pratos regionais.' }
+                ]
+            },
+            {
+                day: 4,
+                date: 'Domingo, 04 de Outubro de 2026',
+                title: 'Descobrir Toulouse & Regresso a Lisboa',
+                tagline: 'Mercados, Monumentos emblemáticos, Compras e Voo Noturno',
+                weather: '18°C - Agradável para caminhadas',
+                events: [
+                    { time: '09:30 - 11:00', title: 'Marché Victor Hugo, Couvent des Jacobins & Saint-Sernin', category: 'sightseeing', location: 'Centro Histórico de Toulouse', description: 'Manhã de cultura: Visita à praça do mercado, Convento dos Jacobinos e Basílica de Saint-Sernin.', tip: 'A Basílica de Saint-Sernin é uma das maiores igrejas românicas da Europa.' },
+                    { time: '12:00 - 13:30', title: 'Almoço Típico nos Restaurantes do 1.º Andar do Mercado', category: 'dining', location: 'Marché Victor Hugo (1.º Andar)', description: 'Almoçar num dos bistros situados por cima das bancas do mercado com produtos fresquíssimos.', tip: 'Excelente relação qualidade/preço e ambiente 100% autêntico toulousano.' },
+                    { time: '14:00 - 17:00', title: 'Passeio no Canal du Midi & Compras na Rue Saint-Rome', category: 'sightseeing', location: 'Rue Saint-Rome & Margens do Canal du Midi', description: 'Tarde para comprar lembranças (produtos de violeta de Toulouse, doces, vinhos) e passeio calmo ao longo do canal.', tip: 'Experimente os rebuçados e sabonetes artesanais de Violette de Toulouse.' },
+                    { time: '19:30 - 20:00', title: 'Check-out Final & Bagagens', category: 'hotel', location: 'Hotel Mercure Capitole', description: 'Recolha das bagagens guardadas no hotel.', tip: 'Caminhar 4 min até à paragem Navette de Jean Jaurès.' },
+                    { time: '20:00 - 20:30', title: 'Transfer Navette para o Aeroporto', category: 'transport', location: 'Paragem Jean Jaurès → Aeroporto Toulouse-Blagnac (TLS)', description: 'Autocarro Expresso para o aeroporto para garantir tempo com folga antes do voo.', tip: 'Bilhete 9,00 €.' },
+                    { time: '22:30 - 23:35', title: 'Voo TLS → LIS (FR1799)', category: 'flight', location: 'Aeroporto Toulouse-Blagnac (Hall D) → Aeroporto de Lisboa', description: 'Voo de regresso a Lisboa (2h05m de duração). Fim da viagem!', tip: 'Chegada a Lisboa às 23:35 (hora local de Portugal).' }
+                ]
+            }
+        ];
+
+        const MAP_LOCATIONS = [
+            { id: 'hotel-mercure', title: 'Hotel Mercure Centre Wilson Capitole', category: 'hotel', categoryLabel: 'Hotéis & Encontros', color: '#E05A47', address: '7 Rue Labeda, 31000 Toulouse', description: 'Hotel oficial da estadia com pequeno-almoço incluído.', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Hotel+Mercure+Toulouse+Centre+Wilson+Capitole' },
+            { id: 'meeting-point', title: 'Ponto de Encontro Autocarros Excursão', category: 'hotel', categoryLabel: 'Hotéis & Encontros', color: '#E05A47', address: '29 Allées Jean Jaurès, 31000 Toulouse', description: 'Ponto de partida dos autocarros para Carcassonne e Albi. Chegar às 09:15!', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=29+All%C3%A9es+Jean+Jaur%C3%A8s+Toulouse' },
+            { id: 'place-capitole', title: 'Place du Capitole', category: 'monument', categoryLabel: 'Monumentos', color: '#0284C7', address: 'Place du Capitole, 31000 Toulouse', description: 'Coração de Toulouse com a impressionante fachada da Câmara Municipal.', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Place+du+Capitole+Toulouse' },
+            { id: 'saint-sernin', title: 'Basílica de Saint-Sernin', category: 'monument', categoryLabel: 'Monumentos', color: '#0284C7', address: 'Place Saint-Sernin, 31000 Toulouse', description: 'Uma das maiores e mais impressionantes basílicas românicas do mundo.', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Basilica+Saint+Sernin+Toulouse' },
+            { id: 'jacobins', title: 'Couvent des Jacobins', category: 'monument', categoryLabel: 'Monumentos', color: '#0284C7', address: 'Allée de la Grotte, 31000 Toulouse', description: 'Convento gótico célebre pela sua abóbada em forma de palmeira.', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Couvent+des+Jacobins+Toulouse' },
+            { id: 'carcassonne-cite', title: 'Cité de Carcassonne (Excursão)', category: 'monument', categoryLabel: 'Monumentos', color: '#0284C7', address: '11000 Carcassonne, França', description: 'A maior cidade fortificada medieval da Europa (visitada no Dia 2).', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Cite+de+Carcassonne' },
+            { id: 'albi-cathedral', title: "Cathédrale Sainte-Cécile d'Albi (Excursão)", category: 'monument', categoryLabel: 'Monumentos', color: '#0284C7', address: '5 Place Sainte-Cécile, 81000 Albi', description: 'Fortaleza-catedral vermelha em tijolos única no mundo (visitada no Dia 3).', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Cathedrale+Sainte+Cecile+Albi' },
+            { id: 'marche-victor-hugo', title: 'Marché Victor Hugo (1.º Andar)', category: 'dining', categoryLabel: 'Restaurantes Económicos', color: '#10B981', address: 'Place Victor Hugo, 31000 Toulouse', description: 'Bistros económicos no 1.º andar com pratos do dia super frescos.', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Marche+Victor+Hugo+Toulouse' },
+            { id: 'le-breughel', title: 'Le Breughel Bistro', category: 'dining', categoryLabel: 'Restaurantes Económicos', color: '#10B981', address: '30 Rue de la Chaîne, 31000 Toulouse', description: 'Pratos do sudoeste francês, Cassoulet saboroso e menus baratos.', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Le+Breughel+Toulouse' },
+            { id: 'la-trivalle', title: 'La Trivalle (Carcassonne)', category: 'dining', categoryLabel: 'Restaurantes Económicos', color: '#10B981', address: '83 Rue Trivalle, 11000 Carcassonne', description: 'Melhor Cassoulet tradicional com ótimo preço aos pés da fortaleza.', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Restaurante+La+Trivalle+Carcassonne' },
+            { id: 'creperie-garric', title: 'Crêperie du Garric (Albi)', category: 'dining', categoryLabel: 'Restaurantes Económicos', color: '#10B981', address: '2 Rue do Garric, 81000 Albi', description: 'Crepes doces e galettes salgadas de trigo sarraceno a preços muito acessíveis.', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Creperie+du+Garric+Albi' },
+            { id: 'navette-jean-jaures', title: 'Paragem Navette Aeroporto - Jean Jaurès', category: 'transport', categoryLabel: 'Transportes', color: '#F97316', address: 'Allée Jean Jaurès, 31000 Toulouse', description: 'Paragem do autocarro rápido Navette para ligação direta com o Aeroporto.', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Navette+Aero+Jean+Jaures+Toulouse' },
+            { id: 'tls-airport', title: 'Aeroporto Toulouse-Blagnac (TLS)', category: 'transport', categoryLabel: 'Transportes', color: '#F97316', address: '31700 Blagnac, França', description: 'Aeroporto de partida e chegada dos voos Ryanair LIS ↔ TLS.', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Aeroporto+Toulouse+Blagnac' }
+        ];
+
+        const REPO_FILES = [
+            {
+                path: '.github/workflows/deploy.yml',
+                language: 'yaml',
+                code: `name: Deploy Expo Web to GitHub Pages / Vercel
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - run: npm install
+      - run: npx expo export --platform web
+      - name: Deploy
+        uses: PeaceIris/actions-gh-pages@v3
+        with:
+          github_token: \${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist`
+            },
+            {
+                path: 'app/(tabs)/_layout.tsx',
+                language: 'typescript',
+                code: `import { Tabs } from 'expo-router';
+import { Home, Calendar, Map, MessageSquare, BookOpen } from 'lucide-react-native';
+
+export default function TabLayout() {
+  return (
+    <Tabs screenOptions={{ tabBarActiveTintColor: '#E05A47' }}>
+      <Tabs.Screen name="index" options={{ title: 'Resumo', tabBarIcon: ({color}) => <Home color={color}/> }} />
+      <Tabs.Screen name="itinerary" options={{ title: 'Itinerário', tabBarIcon: ({color}) => <Calendar color={color}/> }} />
+      <Tabs.Screen name="map" options={{ title: 'Mapa', tabBarIcon: ({color}) => <Map color={color}/> }} />
+      <Tabs.Screen name="ai-assistant" options={{ title: 'IA Concierge', tabBarIcon: ({color}) => <MessageSquare color={color}/> }} />
+      <Tabs.Screen name="guide" options={{ title: 'Guia Local', tabBarIcon: ({color}) => <BookOpen color={color}/> }} />
+    </Tabs>
+  );
+}`
+            },
+            {
+                path: 'constants/TripData.ts',
+                language: 'typescript',
+                code: `export interface FlightInfo {
+  flightNo: string;
+  airline: string;
+  from: string;
+  to: string;
+  date: string;
+  departure: string;
+  arrival: string;
+}
+
+export const TRIP_DATES = {
+  startDate: '2026-10-01',
+  endDate: '2026-10-04',
+  meetingPoint: '29 Allées Jean Jaurès, 31000 Toulouse'
+};`
+            },
+            {
+                path: 'package.json',
+                language: 'json',
+                code: `{
+  "name": "toulouse-travel-app",
+  "version": "1.0.0",
+  "main": "expo-router/entry",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web"
+  },
+  "dependencies": {
+    "expo": "~51.0.0",
+    "expo-router": "~3.5.0",
+    "react": "18.2.0",
+    "react-native": "0.74.1",
+    "nativewind": "^2.0.11",
+    "lucide-react-native": "^0.380.0"
+  }
+}`
+            },
+            {
+                path: 'app.json',
+                language: 'json',
+                code: `{
+  "expo": {
+    "name": "Toulouse Trip Guide 2026",
+    "slug": "toulouse-trip-guide-2026",
+    "version": "1.0.0",
+    "scheme": "toulouse-guide",
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}`
+            },
+            {
+                path: 'README.md',
+                language: 'markdown',
+                code: `# 🇫🇷 Toulouse Trip Guide 2026
+
+Aplicação Web e Mobile ultra-responsiva desenvolvida para acompanhar a viagem a Toulouse, Carcassonne, Albi e Cordes-sur-Ciel (1 a 4 de Outubro de 2026).
+
+## 🚀 Funcionalidades
+- **Dashboard de Viagem**: Resumo de voos Ryanair, hotel e ponto de encontro principal.
+- **Itinerário Interativo**: Timeline completa com horários, transportes e pontos turísticos.
+- **Mapa Interativo**: Marcadores coloridos categorizados por atrações, restaurantes e transportes.
+- **AI Concierge**: Assistente virtual integrado para tirar dúvidas sobre a viagem em tempo real.
+- **Guia Local**: Lista de restaurantes económicos e dicas de viagem.`
+            }
+        ];
+
+        // State Variables
+        let activeTab = 'dashboard';
+        let selectedDay = 1;
+        let mapCategory = 'all';
+        let selectedPin = MAP_LOCATIONS[0];
+        let selectedRepoFile = REPO_FILES[0];
+        let chatMessages = [
+            { role: 'assistant', text: 'Bonjour! Eu sou o Toulouse AI Concierge. Como posso ajudar com a sua viagem de 1 a 4 de Outubro de 2026?' }
+        ];
+
+        // Tab Navigation
+        function switchTab(tabId) {
+            activeTab = tabId;
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+
+            // Desktop Nav Styles
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.className = 'nav-btn flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 text-white/90 hover:bg-white/15 hover:text-white';
+            });
+            const activeNav = document.getElementById(`nav-${tabId}`);
+            if (activeNav) {
+                activeNav.className = 'nav-btn flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 bg-white text-rose-600 shadow-md scale-105';
+            }
+
+            // Mobile Nav Styles
+            document.querySelectorAll('.mobile-nav-btn').forEach(btn => {
+                btn.className = 'mobile-nav-btn flex flex-col items-center py-1 px-2 rounded-xl text-stone-400';
+            });
+            const activeMobileNav = document.getElementById(`mobile-nav-${tabId}`);
+            if (activeMobileNav) {
+                activeMobileNav.className = 'mobile-nav-btn flex flex-col items-center py-1 px-2 rounded-xl text-rose-600 font-bold scale-110';
+            }
+        }
+
+        // Countdown Timer
+        function updateCountdown() {
+            const target = new Date('2026-10-01T17:00:00').getTime();
+            const now = new Date().getTime();
+            const diff = target - now;
+
+            if (diff > 0) {
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                const mins = Math.floor((diff / 1000 / 60) % 60);
+                const secs = Math.floor((diff / 1000) % 60);
+
+                document.getElementById('cd-days').innerText = String(days).padStart(2, '0');
+                document.getElementById('cd-hours').innerText = String(hours).padStart(2, '0');
+                document.getElementById('cd-mins').innerText = String(mins).padStart(2, '0');
+                document.getElementById('cd-secs').innerText = String(secs).padStart(2, '0');
+            }
+        }
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Itinerary Render Logic
+        function selectDay(dayNum) {
+            selectedDay = dayNum;
+            for (let i = 1; i <= 4; i++) {
+                const btn = document.getElementById(`day-btn-${i}`);
+                if (i === dayNum) {
+                    btn.className = 'day-btn p-3 rounded-2xl text-left transition-all border bg-rose-500 text-white border-rose-500 shadow-md scale-[1.02]';
+                } else {
+                    btn.className = 'day-btn p-3 rounded-2xl text-left transition-all border bg-stone-50 text-slate-700 border-stone-200 hover:bg-stone-100';
+                }
+            }
+            renderItinerary();
+        }
+
+        function renderItinerary() {
+            const dayData = ITINERARY_DAYS.find(d => d.day === selectedDay);
+            const container = document.getElementById('itinerary-content');
+
+            let html = `
+                <div class="bg-gradient-to-r from-slate-900 to-rose-950 text-white p-6 rounded-3xl shadow-md border border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <span class="text-xs font-bold text-rose-400 uppercase tracking-widest bg-rose-950/60 border border-rose-800/50 px-3 py-1 rounded-full">
+                            ${dayData.date}
+                        </span>
+                        <h3 class="text-2xl font-black mt-2">${dayData.title}</h3>
+                        <p class="text-stone-300 text-xs sm:text-sm mt-1">${dayData.tagline}</p>
+                    </div>
+                    <div class="bg-white/10 px-4 py-2 rounded-2xl border border-white/10 text-right backdrop-blur-sm self-start md:self-auto">
+                        <span class="text-xs text-stone-300 block font-medium">Meteorologia prevista</span>
+                        <span class="text-sm font-bold text-amber-300">${dayData.weather}</span>
+                    </div>
+                </div>
+
+                <div class="relative pl-6 sm:pl-8 space-y-6 before:absolute before:left-2.5 sm:before:left-3.5 before:top-3 before:bottom-3 before:w-0.5 before:bg-gradient-to-b before:from-rose-500 before:via-orange-400 before:to-stone-300">
+            `;
+
+            dayData.events.forEach(ev => {
+                let catColor = 'bg-slate-100 text-slate-800 border-slate-300';
+                let iconName = 'clock';
+
+                if (ev.category === 'flight') { catColor = 'bg-rose-100 text-rose-800 border-rose-300'; iconName = 'plane'; }
+                else if (ev.category === 'hotel') { catColor = 'bg-purple-100 text-purple-800 border-purple-300'; iconName = 'hotel'; }
+                else if (ev.category === 'dining') { catColor = 'bg-emerald-100 text-emerald-800 border-emerald-300'; iconName = 'utensils'; }
+                else if (ev.category === 'excursion') { catColor = 'bg-sky-100 text-sky-800 border-sky-300'; iconName = 'compass'; }
+                else if (ev.category === 'meeting') { catColor = 'bg-amber-100 text-amber-800 border-amber-300'; iconName = 'alert-triangle'; }
+                else if (ev.category === 'transport') { catColor = 'bg-orange-100 text-orange-800 border-orange-300'; iconName = 'bus'; }
+
+                html += `
+                    <div class="relative group">
+                        <div class="absolute -left-[29px] sm:-left-[37px] top-1.5 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white border-2 border-rose-500 flex items-center justify-center text-rose-600 shadow-sm group-hover:scale-110 transition-transform">
+                            <i data-lucide="${iconName}" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-sm hover:shadow-md transition-shadow space-y-3">
+                            <div class="flex flex-wrap items-center justify-between gap-2">
+                                <span class="text-xs font-mono font-black text-rose-600 bg-rose-50 px-2.5 py-1 rounded-lg border border-rose-200 flex items-center space-x-1">
+                                    <i data-lucide="clock" class="w-3.5 h-3.5 mr-1"></i>
+                                    ${ev.time}
+                                </span>
+                                <span class="text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border ${catColor}">
+                                    ${ev.category.toUpperCase()}
+                                </span>
+                            </div>
+
+                            <div>
+                                <h4 class="text-base font-extrabold text-slate-900">${ev.title}</h4>
+                                <p class="text-xs font-semibold text-rose-500 flex items-center mt-0.5">
+                                    <i data-lucide="map-pin" class="w-3.5 h-3.5 mr-1 flex-shrink-0"></i>
+                                    ${ev.location}
+                                </p>
+                            </div>
+
+                            <p class="text-xs text-stone-600 leading-relaxed">${ev.description}</p>
+
+                            ${ev.tip ? `
+                                <div class="p-3 bg-stone-50 rounded-xl border border-stone-200 text-xs text-stone-700 flex items-start space-x-2">
+                                    <i data-lucide="info" class="w-4 h-4 text-orange-500 flex-shrink-0 mt-0.5"></i>
+                                    <div>
+                                        <strong class="text-stone-900 font-bold">Dica Útil: </strong>
+                                        <span>${ev.tip}</span>
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `</div>`;
+            container.innerHTML = html;
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        }
+
+        // Map Render Logic
+        function filterMap(cat) {
+            mapCategory = cat;
+            document.querySelectorAll('.map-cat-btn').forEach(btn => {
+                btn.className = 'map-cat-btn px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all bg-stone-100 text-slate-700 hover:bg-stone-200';
+            });
+            const activeBtn = document.getElementById(`cat-btn-${cat}`);
+            if (activeBtn) {
+                let colorClass = 'bg-slate-800';
+                if (cat === 'hotel') colorClass = 'bg-rose-500';
+                if (cat === 'monument') colorClass = 'bg-sky-600';
+                if (cat === 'dining') colorClass = 'bg-emerald-600';
+                if (cat === 'transport') colorClass = 'bg-amber-500';
+                activeBtn.className = `map-cat-btn px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${colorClass} text-white shadow-md scale-105`;
+            }
+            renderMapPins();
+        }
+
+        function selectMapPin(pinId) {
+            selectedPin = MAP_LOCATIONS.find(p => p.id === pinId);
+            renderMapPins();
+            renderMapPinDetail();
+        }
+
+        function renderMapPins() {
+            const container = document.getElementById('map-pins-container');
+            const filtered = MAP_LOCATIONS.filter(p => mapCategory === 'all' || p.category === mapCategory);
+
+            let html = '';
+            filtered.forEach(pin => {
+                const isSelected = selectedPin && selectedPin.id === pin.id;
+                html += `
+                    <button onclick="selectMapPin('${pin.id}')" class="p-3 rounded-2xl border text-left transition-all backdrop-blur-md flex flex-col justify-between group ${
+                        isSelected
+                            ? 'bg-white text-slate-900 border-white shadow-lg ring-4 ring-rose-500/40 scale-105 z-20'
+                            : 'bg-slate-800/80 text-stone-200 border-slate-700 hover:bg-slate-700'
+                    }">
+                        <div class="flex items-center space-x-2 mb-2">
+                            <span class="w-3 h-3 rounded-full flex-shrink-0 animate-ping" style="background-color: ${pin.color}"></span>
+                            <span class="w-3 h-3 rounded-full flex-shrink-0 -ml-5" style="background-color: ${pin.color}"></span>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-stone-400 truncate">${pin.categoryLabel}</span>
+                        </div>
+                        <h4 class="font-extrabold text-xs line-clamp-2">${pin.title}</h4>
+                    </button>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function renderMapPinDetail() {
+            const container = document.getElementById('map-pin-detail');
+            if (!selectedPin) return;
+
+            container.innerHTML = `
+                <div class="space-y-4">
+                    <div class="flex items-center space-x-2">
+                        <span class="w-3.5 h-3.5 rounded-full" style="background-color: ${selectedPin.color}"></span>
+                        <span class="text-xs font-bold text-stone-500 uppercase tracking-wider">${selectedPin.categoryLabel}</span>
+                    </div>
+
+                    <h3 class="text-xl font-black text-slate-900">${selectedPin.title}</h3>
+
+                    <div class="space-y-2 text-xs text-stone-600">
+                        <p class="flex items-start">
+                            <i data-lucide="map-pin" class="w-4 h-4 text-rose-500 mr-2 flex-shrink-0 mt-0.5"></i>
+                            <span class="font-medium text-slate-800">${selectedPin.address}</span>
+                        </p>
+                    </div>
+
+                    <div class="p-4 bg-stone-50 rounded-2xl border border-stone-200 text-xs text-stone-700">
+                        <p class="leading-relaxed">${selectedPin.description}</p>
+                    </div>
+
+                    <a href="${selectedPin.googleMapsUrl}" target="_blank" rel="noreferrer" class="w-full bg-rose-500 hover:bg-rose-600 text-white text-xs font-bold py-3 rounded-xl flex items-center justify-center space-x-2 transition-colors shadow-sm">
+                        <i data-lucide="navigation" class="w-4 h-4"></i>
+                        <span>Como Chegar (Google Maps)</span>
+                    </a>
+                </div>
+            `;
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        }
+
+        // AI Chat Logic
+        function renderChat() {
+            const container = document.getElementById('chat-messages');
+            let html = '';
+            chatMessages.forEach(msg => {
+                const isUser = msg.role === 'user';
+                html += `
+                    <div class="flex items-start space-x-3 ${isUser ? 'flex-row-reverse space-x-reverse' : ''}">
+                        <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold ${isUser ? 'bg-slate-800 text-white' : 'bg-rose-500 text-white'}">
+                            ${isUser ? 'Eu' : '<i data-lucide="bot" class="w-4 h-4"></i>'}
+                        </div>
+                        <div class="max-w-[80%] sm:max-w-[70%] p-4 rounded-2xl text-xs sm:text-sm leading-relaxed ${isUser ? 'bg-slate-900 text-white rounded-tr-none' : 'bg-white text-slate-800 border border-stone-200 shadow-sm rounded-tl-none'}">
+                            ${msg.text}
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+            container.scrollTop = container.scrollHeight;
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        }
+
+        function sendPresetMessage(text) {
+            document.getElementById('chat-input').value = text;
+            handleUserSend();
+        }
+
+        async function handleUserSend() {
+            const input = document.getElementById('chat-input');
+            const query = input.value.trim();
+            if (!query) return;
+
+            chatMessages.push({ role: 'user', text: query });
+            input.value = '';
+            renderChat();
+
+            // Simulate AI response logic
+            setTimeout(() => {
+                let responseText = "Desculpe, não entendi a pergunta. Pode perguntar sobre voos, autocarros ou restaurantes!";
+                const q = query.toLowerCase();
+
+                if (q.includes('navette') || q.includes('aeroporto')) {
+                    responseText = "A Navette Expresso do Aeroporto TLS custa 9,00 € por pessoa. Parte a cada 15 minutos e leva-o diretamente à paragem Jean Jaurès (a 4 minutos a pé do Hotel Mercure Capitole).";
+                } else if (q.includes('cassoulet') || q.includes('comer')) {
+                    responseText = "Recomendamos vivamente o Cassoulet do restaurante 'La Trivalle' em Carcassonne (Dia 2) ou o 'Le Breughel' no centro de Toulouse (Dia 2 à noite). Excelentes preços e porções generosas!";
+                } else if (q.includes('água') || q.includes('gratuita') || q.includes('francês')) {
+                    responseText = "Para pedir água potável e 100% gratuita nos restaurantes em França, diga: 'Une carafe d'eau, s'il vous plaît' (pronúncia: Yn ka-raf do, sil vu ple).";
+                } else if (q.includes('carcassonne') || q.includes('horário')) {
+                    responseText = "O autocarro para a excursão de Carcassonne parte às 09:30 do dia 02 de Outubro do ponto 29 Allées Jean Jaurès. A comparência no local deve ser às 09:15!";
+                }
+
+                chatMessages.push({ role: 'assistant', text: responseText });
+                renderChat();
+            }, 600);
+        }
+
+        // Repo Files Logic
+        function selectRepoFile(idx) {
+            selectedRepoFile = REPO_FILES[idx];
+            renderRepoFiles();
+        }
+
+        function renderRepoFiles() {
+            const listContainer = document.getElementById('repo-files-list');
+            let listHtml = '';
+
+            REPO_FILES.forEach((file, idx) => {
+                const isActive = selectedRepoFile.path === file.path;
+                listHtml += `
+                    <button onclick="selectRepoFile(${idx})" class="w-full text-left px-3 py-2.5 rounded-xl text-xs font-mono flex items-center justify-between transition-colors ${
+                        isActive ? 'bg-rose-500 text-white font-bold shadow-sm' : 'text-slate-700 hover:bg-stone-100'
+                    }">
+                        <span class="truncate">${file.path}</span>
+                        <i data-lucide="chevron-right" class="w-3.5 h-3.5 opacity-60"></i>
+                    </button>
+                `;
+            });
+
+            listContainer.innerHTML = listHtml;
+            document.getElementById('repo-file-path').innerText = selectedRepoFile.path;
+            document.getElementById('repo-file-code').innerText = selectedRepoFile.code;
+            document.getElementById('repo-file-lang').innerText = `Linguagem: ${selectedRepoFile.language.toUpperCase()}`;
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        }
+
+        function copyRepoCode() {
+            navigator.clipboard.writeText(selectedRepoFile.code);
+            const copyBtnText = document.getElementById('copy-btn-text');
+            copyBtnText.innerText = "Copiado!";
+            setTimeout(() => {
+                copyBtnText.innerText = "Copiar Código";
+            }, 2000);
+        }
+
+        // Initialize App
+        window.onload = () => {
+            renderItinerary();
+            renderMapPins();
+            renderMapPinDetail();
+            renderChat();
+            renderRepoFiles();
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        };
+    </script>
+</body>
+</html>
